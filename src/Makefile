@@ -3,13 +3,16 @@ CFLAGS = -Wall -Wextra -Werror -std=c11 -c
 OS := $(shell uname)
 TEST_FLAGS = $(shell pkg-config --cflags --libs check)
 
-all: clean s21_string.a test gcov_report
+all: clean s21_string.a test gcov_report open
 
 test: test.o s21_string.a
 	$(CC) test.o s21_string.a -o test -L. $(TEST_FLAGS)
 
 test.o: test.c
 	$(CC) $(CFLAGS) test.c -o test.o
+
+test.c:
+	checkmk clean_mode=1 include.file *.check > test.c
 
 s21_string.a: s21_string.o
 	ar rcs s21_string.a s21_string.o
@@ -19,7 +22,7 @@ s21_string.o: s21_string.c
 	$(CC) $(CFLAGS) s21_string.c -o s21_string.o
 
 clean:
-	rm -rf *.o *.a *.out *.info *.html *.gc* test gcov_report s21_string report
+	rm -rf *.o *.a *.out *.info *.html *.gc* test gcov_report s21_string report test.c
 
 gcov_report:
 	$(CC) -fprofile-arcs -ftest-coverage test.c s21_string.c -o gcov_report $(TEST_FLAGS)
@@ -45,7 +48,6 @@ ifeq ($(OS),Darwin)
 	CK_FORK=no leaks -atExit -- ./test
 else
 	valgrind --leak-check=full -s --track-origins=yes ./test
-endif
-	
+endif	
 
 rebuild: all

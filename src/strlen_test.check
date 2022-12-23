@@ -1,0 +1,4 @@
+#test strlen_test
+  char* str = "Hello, this is 21 len";
+
+  ck_assert_int_eq(strlen(str), s21_strlen(str));

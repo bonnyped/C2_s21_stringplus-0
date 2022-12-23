@@ -1,0 +1,4 @@
+#test strcat_test
+  char str[30] = "Hello, this is 21 len"; 
+
+  ck_assert_str_eq(strcat(str, " test"), s21_strcat(str, " test"));
