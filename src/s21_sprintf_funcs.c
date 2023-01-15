@@ -268,7 +268,7 @@ int is_zero(void* number, int type) {
   return result;
 }
 
-// prec+w+printing len check
+// prec+w+printing len check INF SGN
 void print_double(double num, int precision, int width, int right_padding,
                   int plus_sgn, int space_symbol, char* dst) {
   if (isnan(num)) {
