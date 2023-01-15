@@ -4,7 +4,6 @@
 
 int get_format_type(const char* format_string) {
   int result = NOT_VALID_RESULT;
-  const char* pattern_start = format_string;
   char correct_formats[] = "ducsfi";
   char* result_of_search = s21_strpbrk(format_string, correct_formats);
   if (result_of_search != NULL) {
@@ -72,8 +71,7 @@ void execute_pattern(int data_type, va_list* args, char* dst,
                    executable_pattern.pattern_flags.minus_sgn);
       } else if (executable_pattern.length == 'l') {
         wchar_arg = va_arg(*args, wchar_t);
-        print_long_char(wchar_arg, dst, executable_pattern.width,
-                        executable_pattern.pattern_flags.minus_sgn);
+        print_long_char(wchar_arg, dst);
       }
       break;
     case TYPE_INT:
@@ -120,11 +118,8 @@ void execute_unsigned_int_pattern(int data_type, va_list* args, char* dst,
 
 void execute_int_pattern(int data_type, va_list* args, char* dst,
                          pattern executable_pattern) {
-  int int_arg;
-  long int long_int_arg;
-  short int short_int_arg;
   if (executable_pattern.length == 'n') {
-    int_arg = va_arg(*args, int);
+    int int_arg = va_arg(*args, int);
     print_int(&int_arg, executable_pattern.precision, executable_pattern.width,
               executable_pattern.pattern_flags.minus_sgn,
               executable_pattern.pattern_flags.plus_sgn, 1,

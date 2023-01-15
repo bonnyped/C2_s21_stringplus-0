@@ -24,11 +24,9 @@ void print_char(char symb, char* dst, int width, int right_padding) {
   }
 }
 // NOT RDY YET
-void print_long_char(wchar_t symb, char* input_dst, int width,
-                     int right_padding) {
+void print_long_char(wchar_t symb, char* input_dst) {
   wchar_t* dst = (wchar_t*)input_dst;
   wchar_t source[2];
-  wchar_t* original = dst;
   source[0] = symb;
   source[1] = 0;
   while (*dst != 0) {
@@ -51,7 +49,7 @@ void print_string(char* string, char* dst, int precision, int width,
   } else {
     str_len = precision;
   }
-  if (str_len < width && !right_padding) {
+  if ((int)str_len < width && !right_padding) {
     add_padding(width - str_len, dst);
   }
   if (precision == 0) {
@@ -59,7 +57,7 @@ void print_string(char* string, char* dst, int precision, int width,
   } else {
     s21_strncat(dst, string, precision);
   }
-  if (str_len < width && right_padding) {
+  if ((int)str_len < width && right_padding) {
     add_padding(width - str_len, dst);
   }
 }
@@ -70,12 +68,12 @@ void print_int(void* number, int precision, int width, int right_padding,
                int plus_sgn, int minus_sgn, int space_symbol, char* dst,
                int type) {
   s21_size_t array_len = number_length(number, type);
-  char* array = NULL;
+  char* array = s21_NULL;
   if (precision != 0 || (precision == 0 && !is_zero(number, type))) {
     array = malloc(sizeof(char) * array_len);
   }
   int number_sgn = get_int_sign(number, type);
-  int printing_len = precision > array_len ? precision : array_len;
+  int printing_len = precision > (int)array_len ? precision : (int)array_len;
   printing_len += (plus_sgn || space_symbol || (minus_sgn && number_sgn == -1));
   if (width > printing_len && !right_padding) {
     add_padding(width - (printing_len), dst);
@@ -84,13 +82,13 @@ void print_int(void* number, int precision, int width, int right_padding,
     int_to_chars(number, array_len, array, type);
 
     print_sign(plus_sgn, minus_sgn, space_symbol, number_sgn, dst);
-    if (precision > 0 && precision > array_len) {
+    if (precision > 0 && precision > (int)array_len) {
       int difference = precision - (int)array_len;
       for (; difference > 0; difference--) {
         print_char('0', dst, 1, 0);
       }
     }
-    for (int i = 0; i < array_len; i++) {
+    for (int i = 0; i < (int)array_len; i++) {
       print_char(array[i], dst, 1, 0);
     }
     free(array);
@@ -339,7 +337,6 @@ void print_fractional_float(float fractional, int precision, int plus_sgn,
 
 void print_whole_float(double num, char* dst) {
   int digit;
-  double tmp = 0;
   for (int i = log10f(num); i >= 0; i--) {
     double weight = pow(10.0, i);
     if (weight > 0 && !isinf(weight)) {

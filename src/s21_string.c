@@ -94,4 +94,5 @@ int s21_sprintf(char* dst, const char* format_string, ...) {
   }
   va_end(args);
   result = s21_strlen(dst);
+  return result;
 }

@@ -13,16 +13,16 @@ my_test: main.o s21_string.o s21_sprintf_funcs.o s21_sprintf_parser.o
 	$(CC) main.o s21_string.o s21_sprintf_funcs.o s21_sprintf_parser.o -o my_test.out -lm
 	
 main.o:
-	$(CC) -c main.c -o main.o
+	$(CC) $(CFLAGS) -c main.c -o main.o
 
 s21_string.o:
-	$(CC) -c s21_string.c -o s21_string.o
+	$(CC) $(CFLAGS) -c s21_string.c -o s21_string.o
 	
 s21_sprintf_funcs.o:
-	$(CC) -c s21_sprintf_funcs.c -o s21_sprintf_funcs.o
+	$(CC) $(CFLAGS) -c s21_sprintf_funcs.c -o s21_sprintf_funcs.o
 	
 s21_sprintf_parser.o:
-	$(CC) -c s21_sprintf_parser.c -o s21_sprintf_parser.o
+	$(CC) $(CFLAGS) -c s21_sprintf_parser.c -o s21_sprintf_parser.o
 
 test.o: test.c
 	$(CC) $(CFLAGS) test.c -o test.o

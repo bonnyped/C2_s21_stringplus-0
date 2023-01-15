@@ -1,5 +1,4 @@
 #test int_test
-#include <string.h>
   int i1 = 1234;
   char res[200];
   char resorig[200];

@@ -35,8 +35,7 @@ typedef struct pattern {
 } pattern;
 
 void print_char(char symb, char* dst, int width, int right_padding);
-void print_long_char(wchar_t symb, char* input_dst, int width,
-                     int right_padding);
+void print_long_char(wchar_t symb, char* input_dst);
 void print_string(char* string, char* dst, int precision, int width,
                   int left_padding);
 void add_padding(int num, char* dst);
