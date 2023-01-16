@@ -271,11 +271,7 @@ int is_zero(void* number, int type) {
 // prec+w+printing len check INF SGN
 void print_double(double num, int precision, int width, int right_padding,
                   int plus_sgn, int space_symbol, char* dst) {
-  if (isnan(num)) {
-    print_string("nan", dst, 0, 0, 0);
-  } else if (isinf(num)) {
-    print_string("inf", dst, 0, 0, 0);
-  } else {
+  if (!check_special_float_nums(num, dst)) {
     int number_sgn = 0;
     int whole_len;
     if (num < 0) {
@@ -301,13 +297,19 @@ void print_double(double num, int precision, int width, int right_padding,
     if (tmp != NULL) {
       tmp[0] = 0;
       print_sign(plus_sgn, 1, space_symbol, number_sgn, tmp);
-      if (whole_len > 1) {
-        print_whole_float(whole_part, tmp);
+      if (whole_len > 1 || whole_part != 0) {
+        if (precision > 0) {
+          print_whole_float(whole_part, tmp);
+        } else {
+          int i_num = (int)(num + 0.5);
+          print_int(&i_num, 0, 0, 0, 0, 0, 0, dst, TYPE_INT);
+        }
       } else {
         print_char('0', tmp, 1, 0);
       }
-      print_char('.', tmp, 1, 0);
-
+      if (precision > 0) {
+        print_char('.', tmp, 1, 0);
+      }
       if ((int)(fract_part * pow(10, precision + 1)) % 10 >= 5) {
         fract_part = fract_part + 0.5 * pow(10, -precision);
       }
@@ -323,6 +325,28 @@ void print_double(double num, int precision, int width, int right_padding,
                   dst);
     }
   }
+}
+
+int check_special_float_nums(double num, char* dst) {
+  int result = 0;
+  if (isnan(num)) {
+    if (signbit(num) == 0) {
+      print_char('+', dst, 0, 0);
+    } else {
+      print_char('-', dst, 0, 0);
+    }
+    print_string("nan", dst, 0, 0, 0);
+    result = 1;
+  } else if (isinf(num)) {
+    if (signbit(num) == 0) {
+      print_char('+', dst, 0, 0);
+    } else {
+      print_char('-', dst, 0, 0);
+    }
+    print_string("inf", dst, 0, 0, 0);
+    result = 1;
+  }
+  return result;
 }
 
 void print_fractional_float(float fractional, int precision, int plus_sgn,

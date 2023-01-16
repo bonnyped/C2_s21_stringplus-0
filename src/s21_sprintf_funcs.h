@@ -53,4 +53,5 @@ void print_double(double num, int precision, int width, int right_padding,
 void print_whole_float(double num, char* dst);
 void print_fractional_float(float fractional, int precision, int plus_sgn,
                             char* dst);
+int check_special_float_nums(double num, char* dst);
 #endif
