@@ -1,0 +1,132 @@
+
+#siute sprintf_test_d
+
+#test s21_sprintf_d_1
+    char str[100] = "\0";
+    char str2[100] = "\0";
+    ck_assert_int_eq(sprintf(str, "%+d", 12345), s21_sprintf(str2, "%+d", 12345));
+    ck_assert_str_eq(str1, str2);
+
+#test s21_sprintf_d_2
+    char str[100] = "\0";
+    char str2[100] = "\0";
+    ck_assert_int_eq(sprintf(str, "%-13d", 12345), s21_sprintf(str2, "%-13d", 12345));
+    ck_assert_str_eq(str1, str2);
+
+#test s21_sprintf_d_3
+    char str[100] = "\0";
+    char str2[100] = "\0";
+    ck_assert_int_eq(sprintf(str, "%0.d", 0), s21_sprintf(str2, "%0.d", 0));
+    ck_assert_str_eq(str1, str2);
+
+#test s21_sprintf_d_4
+    char str[100] = "\0";
+    char str2[100] = "\0";
+    ck_assert_int_eq(sprintf(str, "%+d", 2147483647), s21_sprintf(str2, "%+d", 2147483647));
+    ck_assert_str_eq(str1, str2);
+
+#test s21_sprintf_d_5
+    char str[100] = "\0";
+    char str2[100] = "\0";
+    ck_assert_int_eq(sprintf(str, "%-20d", -2147483647), s21_sprintf(str2, "%-20d", -2147483647));
+    ck_assert_str_eq(str1, str2);
+
+#test s21_sprintf_d_6
+    char str[100] = "\0";
+    char str2[100] = "\0";
+    ck_assert_int_eq(sprintf(str, "%20d", -2147483647), s21_sprintf(str2, "%20d", -2147483647));
+    ck_assert_str_eq(str1, str2);
+
+#test s21_sprintf_d_7
+    char str[100] = "\0";
+    char str2[100] = "\0";
+    ck_assert_int_eq(sprintf(str, "% d", 2147483647), s21_sprintf(str2, "% d", 2147483647));
+    ck_assert_str_eq(str1, str2);
+
+#test s21_sprintf_d_8
+    char str[100] = "\0";
+    char str2[100] = "\0";
+    ck_assert_int_eq(sprintf(str, "%0.15d", 2147483647), s21_sprintf(str2, "%0.15d", 2147483647));
+    ck_assert_str_eq(str1, str2);
+
+#test s21_sprintf_d_9
+    char str[100] = "\0";
+    char str2[100] = "\0";
+    ck_assert_int_eq(sprintf(str, "%-+20d", 2147483647), s21_sprintf(str2, "%-+20d", 2147483647));
+    ck_assert_str_eq(str1, str2);
+
+#test s21_sprintf_d_10
+    char str[100] = "\0";
+    char str2[100] = "\0";
+    ck_assert_int_eq(sprintf(str, "%+-20d", 2147483647), s21_sprintf(str2, "%+-20d", 2147483647));
+    ck_assert_str_eq(str1, str2);
+
+#test s21_sprintf_d_11
+    char str[100] = "\0";
+    char str2[100] = "\0";
+    char *str3 = "%- d |%- 15d|#|%- .7d| test %- d";
+    ck_assert_int_eq(sprintf(str, str3, -334, -332, 1, 1234567890), 12345), s21_sprintf(str2, str3, -334, -332, 1, 1234567890), 12345));
+    ck_assert_str_eq(str1, str2);
+
+#test s21_sprintf_d_12
+    char str[100] = "\0";
+    char str2[100] = "\0";
+    char *str3 = "%- d |% 15d|#|%- .7d| test %-d";
+    ck_assert_int_eq(sprintf(str, str3, -334, -332, 1, 1234567890), 12345), s21_sprintf(str2, str3, -334, -332, 1, 1234567890), 12345));
+    ck_assert_str_eq(str1, str2);
+
+#test s21_sprintf_d_13
+    char str[100] = "\0";
+    char str2[100] = "\0";
+    ck_assert_int_eq(sprintf(str, "%-40ld%40ld", 4294967295444444444,4294967295678909876), s21_sprintf(str2, "%-40ld%40ld", 4294967295444444444,4294967295678909876));
+    ck_assert_str_eq(str1, str2);
+
+#test s21_sprintf_d_14
+    char str[100] = "\0";
+    char str2[100] = "\0";
+    char *str3 = "%- 1.3d% -1.4d% -1.5d%- 1.6d% -1.7d% -6.8d% -1.9d";
+    ck_assert_int_eq(sprintf(str, str3, 'H','a','m','l','e','t','!'), s21_sprintf(str2, str3, 'H','a','m','l','e','t','!'));
+    ck_assert_str_eq(str1, str2);
+
+#test s21_sprintf_d_15
+    char str[100] = "\0";
+    char str2[100] = "\0";
+        char *str3 = "%0.0d%0d%0d%0d%0d%0d%0d%.*d";
+    ck_assert_int_eq(sprintf(str, str3, '\0','\n','\t','1','9','*','#', 1, 1990), s21_sprintf(str2, str3, '\0','\n','\t','1','9','*','#', 1, 1990));
+    ck_assert_str_eq(str1, str2);
+
+#test s21_sprintf_d_16
+    char str[100] = "\0";
+    char str2[100] = "\0";
+    ck_assert_int_eq(sprintf(str, "%-*d%*d", 27, 1, 27, 1), s21_sprintf(str2, "%-*d%*d", 27, 1, 27, 1));
+    ck_assert_str_eq(str1, str2);
+
+#test s21_sprintf_d_17
+    char str[100] = "\0";
+    char str2[100] = "\0";
+    ck_assert_int_eq(sprintf(str, "%%%d%%%%%22.*d",  1, 27, 1), s21_sprintf(str2, "%%%d%%%%%22.*d",  1, 27, 1));
+    ck_assert_str_eq(str1, str2);
+
+#test s21_sprintf_hd_18
+    char str[100] = "\0";
+    char str2[100] = "\0";
+    short i = 11;
+    ck_assert_int_eq(sprintf(str, "%+hd%20hd%+-15.5hd",  i,i,i), s21_sprintf(str2, "%+hd%20hd%+-15.5hd",  i,i,i));
+    ck_assert_str_eq(str1, str2);
+
+#test s21_sprintf_d_19
+    char str[100] = "\0";
+    char str2[100] = "\0";
+    short i = 11;
+    ck_assert_int_eq(sprintf(str, "%hd%s%ld%s%d",  i, "short", 271219902712, "LONG", 1990), s21_sprintf(str2, "%hd%s%ld%s%d",  i, "short", 271219902712, "LONG", 1990));
+    ck_assert_str_eq(str1, str2);
+
+#test s21_sprintf_d_20
+    char str[100] = "\0";
+    char str2[100] = "\0";
+    short i = 11;
+    long g = 12345678901;
+    int a = 0x77;
+    ck_assert_int_eq(sprintf(str, "%hd%s%ld%s%d",   i, "short", g, "LONG", a), s21_sprintf(str2, "%hd%s%ld%s%d",  i, "short", g, "LONG", a));
+    ck_assert_str_eq(str1, str2);
+
