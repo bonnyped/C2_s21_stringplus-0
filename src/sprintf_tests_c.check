@@ -1,2 +1,7 @@
 #siute sprintf_test_c
 
+#test s21_sprintf_c_1
+  char res[200] = "\0";
+  char resorig[200] = "\0";
+  ck_assert_int_eq(sprintf(res, "%c", '!'), s21_sprintf(resorig, "%c", '!'));
+  ck_assert_str_eq(res, resorig);
