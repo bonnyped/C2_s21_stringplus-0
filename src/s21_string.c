@@ -7,18 +7,35 @@ void* s21_memchr(const void* str, int c, s21_size_t n) {
 }
 
 int s21_memcmp(const void* str1, const void* str2, s21_size_t n) {
-  return memcmp(str1, str2, n);
+  int res = 0;
+  const char* first = str1;
+  const char* second = str2;
+  s21_size_t i = 0;
+  int exit = 0;
+
+  while (i < n && !exit) {
+    if (first[i] != second[i]) {
+      if (first[i] < second[i]) {
+        res = -1;
+        exit = 1;
+      }
+      else {
+        res = 1;
+        exit = 1;
+      }
+    }
+    i++;
+  }
+
+  return res;
 }
 
 void* s21_memcpy(void* dest, const void* src, s21_size_t n) {
   char* dest_copy = dest;
   const char* src_copy = src;
 
-  while (n) {
-    *dest_copy = *src_copy;
-    dest_copy++;
-    src_copy++;
-    n--;
+  for (s21_size_t i = 0; i < n; i++) {
+    dest_copy[i] = src_copy[i];
   }
 
   return dest;

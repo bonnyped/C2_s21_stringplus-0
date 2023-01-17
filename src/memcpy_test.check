@@ -1,4 +1,5 @@
 #suite memcpy_test
+
 #test memcpy_test_1
   const char* t1 = "string_test num 1";
   char q1[100] = {'\0'};
@@ -15,7 +16,7 @@
   const char* t3 = "str\0ing_test num 3";
   char q3[100] = "STR\0ING_TEST NUM 3";
   char Q3[100] = "STR\0ING_TEST NUM 3";
-  ck_assert_str_eq(memcpy(q3+2, t3, 5), s21_memcpy(Q3+2, t3, 5));
+  ck_assert_str_eq(memcpy(q3 + 2, t3, 5), s21_memcpy(Q3 + 2, t3, 5));
 
 #test memcpy_test_4
   const char* t4 = "str\0ing_test num 4";
