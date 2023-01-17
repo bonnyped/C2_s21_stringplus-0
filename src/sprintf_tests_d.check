@@ -1,4 +1,4 @@
-#siute sprintf_test_d
+#suite sprintf_test_d
 
 #test s21_sprintf_d_1
   char res[200] = "\0";
