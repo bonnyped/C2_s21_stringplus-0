@@ -1,5 +1,6 @@
-#include <string.h>
 #include "s21_string.h"
+
+#include <string.h>
 
 void* s21_memchr(const void* str, int c, s21_size_t n) {
   return memchr(str, c, n);
@@ -10,7 +11,17 @@ int s21_memcmp(const void* str1, const void* str2, s21_size_t n) {
 }
 
 void* s21_memcpy(void* dest, const void* src, s21_size_t n) {
-  return memcpy(dest, src, n);
+  char* dest_copy = dest;
+  const char* src_copy = src;
+
+  while (n) {
+    *dest_copy = *src_copy;
+    dest_copy++;
+    src_copy++;
+    n--;
+  }
+
+  return dest;
 }
 
 void* s21_memmove(void* dest, const void* src, s21_size_t n) {

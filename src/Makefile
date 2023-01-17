@@ -3,10 +3,11 @@ CFLAGS = -Wall -Wextra -Werror -std=c11 -c
 OS := $(shell uname)
 TEST_FLAGS = $(shell pkg-config --cflags --libs check)
 
-all: clean s21_string.a test gcov_report open
+all: clean s21_string.a test gcov_report
 
 test: test.o s21_string.a
 	$(CC) test.o s21_string.a -o test -L. $(TEST_FLAGS)
+	./test
 
 test.o: test.c
 	$(CC) $(CFLAGS) test.c -o test.o
