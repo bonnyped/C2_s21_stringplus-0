@@ -3,7 +3,20 @@
 #include <string.h>
 
 void* s21_memchr(const void* str, int c, s21_size_t n) {
-  return memchr(str, c, n);
+  const char* str_copy = str;
+  void* res = (void*)str;
+  s21_size_t i = 0;
+  int exit = 0;
+
+  while (i < n && !exit) {
+    if (str_copy[i] == c) {
+      exit = 1;
+      res = (void*)(str_copy + i);
+    }
+    i++;
+  }
+
+  return exit ? res : NULL;
 }
 
 int s21_memcmp(const void* str1, const void* str2, s21_size_t n) {
