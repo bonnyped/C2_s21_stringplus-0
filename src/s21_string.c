@@ -59,7 +59,15 @@ void* s21_memmove(void* dest, const void* src, s21_size_t n) {
 }
 
 void* s21_memset(void* str, int c, s21_size_t n) {
-  return memset(str, c, n);
+  char* str_copy = str;
+  s21_size_t i = 0;
+
+  while (i < n) {
+    str_copy[i] = c;
+    i++;
+  }
+
+  return str_copy;
 }
 
 char* s21_strcat(char* dest, const char* src) {
