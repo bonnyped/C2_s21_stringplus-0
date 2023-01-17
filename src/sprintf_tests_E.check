@@ -1,0 +1,106 @@
+#suite s21_sprintf_tests_E
+
+#test only_flag_E
+double a = 777.0;
+char res[200];
+char resorig[200];
+
+ck_assert_str_eq(s21_sprintf(res, "%E\n", a), sprintf(resorig, "%E\n", a));
+
+#test with_width
+float a = 777.0;
+char res[200];
+char resorig[200];
+ck_assert_str_eq(s21_sprintf(res, "%30E\n", a), sprintf(resorig, "%30E\n", a));
+ck_assert_int_eq(s21_sprintf(res, "%30E\n", a), sprintf(resorig, "%30E\n", a));
+
+#test with_accuracy
+double a = 777.0;
+char res[200];
+char resorig[200];
+ck_assert_str_eq(s21_sprintf(res, "%.5E\n", a), sprintf(resorig, "%.5E\n", a));
+ck_assert_int_eq(s21_sprintf(res, "%.30E\n", a), sprintf(resorig, "%.30E\n", a));
+
+#test with_width_and_accuracy
+float a = 777.0;
+char res[200];
+char resorig[200];
+ck_assert_str_eq(s21_sprintf(res, "%30.5E\n", a), sprintf(resorig, "%30.5E\n", a));
+ck_assert_int_eq(s21_sprintf(res, "%5.30E\n", a), sprintf(resorig, "%5.30E\n", a));
+
+#test double_100_flag_0
+double a = 100;
+char res[200];
+char resorig[200];
+ck_assert_str_eq(s21_sprintf(res, "%.0E\n", a), sprintf(resorig, "%.0E\n", a));
+ck_assert_int_eq(s21_sprintf(res, "%.0E\n", a), sprintf(resorig, "%.0E\n", a));
+
+#test with_long_double
+long double a = 777.777;
+char res[200];
+char resorig[200];
+ck_assert_str_eq(s21_sprintf(res, "%LE\n", a), sprintf(resorig, "%LE\n", a));
+ck_assert_int_eq(s21_sprintf(res, "%LE\n", a), sprintf(resorig, "%LE\n", a));
+
+#test with_width_accuracy_and_long_double
+long double a = 777.777;
+char res[200];
+char resorig[200];
+ck_assert_str_eq(s21_sprintf(res, "%30.40LE\n", a), sprintf(resorig, "%30.40LE\n", a));
+ck_assert_int_eq(s21_sprintf(res, "%30.40LE\n", a), sprintf(resorig, "%30.40LE\n", a));
+
+#test with_width_accuracy_long_double_and_flag_plus
+long double a = 777;
+char res[200];
+char resorig[200];
+ck_assert_str_eq(s21_sprintf(res, "%+2.0LE\n", a), sprintf(resorig, "%+2.0LE\n", a));
+ck_assert_int_eq(s21_sprintf(res, "%+2.0LE\n", a), sprintf(resorig, "%+2.0LE\n", a));
+
+#test with_width_accuracy_long_double_and_flag_minus
+long double a = 777;
+char res[200];
+char resorig[200];
+ck_assert_str_eq(s21_sprintf(res, "%-200.0LE\n", a), sprintf(resorig, "%-200.0LE\n", a));
+ck_assert_int_eq(s21_sprintf(res, "%-200.0LE\n", a), sprintf(resorig, "%-200.0LE\n", a));
+
+#test with_width_accuracy_long_double_and_flag_space_without_sign
+long double a = 777;
+char res[200];
+char resorig[200];
+ck_assert_str_eq(s21_sprintf(res, "%- 2.0LE\n", a), sprintf(resorig, "%- 2.0LE\n", a));
+ck_assert_int_eq(s21_sprintf(res, "%- 2.0LE\n", a), sprintf(resorig, "%- 2.0LE\n", a));
+
+#test with_width_accuracy_long_double_and_flag_space_signed
+long double a = -777;
+char res[200];
+char resorig[200];
+ck_assert_str_eq(s21_sprintf(res, "%- 2.0LE\n", a), sprintf(resorig, "%- 2.0LE\n", a));
+ck_assert_int_eq(s21_sprintf(res, "%- 2.0LE\n", a), sprintf(resorig, "%- 2.0LE\n", a));
+
+#test with_width_accuracy_long_double_flag_space_signed_and_octothorpe
+long double a = -777;
+char res[200];
+char resorig[200];
+ck_assert_str_eq(s21_sprintf(res, "%#- 2.0LE\n", a), sprintf(resorig, "%#- 2.0LE\n", a));
+ck_assert_int_eq(s21_sprintf(res, "%#- 2.0LE\n", a), sprintf(resorig, "%#- 2.0LE\n", a));
+
+#test with_width_accuracy_float_flag_space_octothorpe_and_asterixes
+float a = 100;
+char res[200];
+char resorig[200];
+ck_assert_str_eq(s21_sprintf(res, "%#-+*.*E\n", 1, 2, a), sprintf(resorig, "%#-+*.*E\n", 1, 2, a));
+ck_assert_int_eq(s21_sprintf(res, "%#-+*.*E\n", 1, 2, a), sprintf(resorig, "%#-+*.*E\n", 1, 2, a));
+
+#test with_width_accuracy_float_flag_signed_octothorpe_and_asterixes
+float a = 123.321;
+char res[200];
+char resorig[200];
+ck_assert_str_eq(s21_sprintf(res, "%#+*.*E\n\", 1, 1, a), sprintf(resorig, "%#+*.*E\n\", 1, 1, a));
+ck_assert_int_eq(s21_sprintf(res, "%#+*.*E\n\", 1, 1, a), sprintf(resorig, "%#+*.*E\n\", 1, 1, a));
+
+#test with_width_accuracy_float_flag_and_asterix
+float a = 123.321;
+char res[200];
+char resorig[200];
+ck_assert_str_eq(s21_sprintf(res, "%*.3E\n", 1, a), sprintf(resorig, "%*.3E\n", 1, a));
+ck_assert_int_eq(s21_sprintf(res, "%*.3E\n", 1, a), sprintf(resorig, "%*.3E\n", 1, a));
