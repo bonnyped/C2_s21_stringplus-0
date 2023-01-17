@@ -71,7 +71,19 @@ char* s21_strncat(char* dest, const char* src, s21_size_t n) {
 }
 
 char* s21_strchr(const char* str, int c) {
-  return strchr(str, c);
+  char* res = NULL;
+  s21_size_t i = 0;
+  int exit = 0;
+
+  while (str[i] != '\0' && !exit) {
+    if (str[i] == c) {
+      exit = 1;
+      res = (char*)(str + i);
+    }
+    i++;
+  }
+
+  return exit ? res : NULL;
 }
 
 int s21_strcmp(const char* str1, const char* str2) {
