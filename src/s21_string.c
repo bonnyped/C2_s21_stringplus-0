@@ -120,16 +120,21 @@ char* s21_strchr(const char* str, int c) {
 }
 
 int s21_strcmp(const char *str1, const char *str2) {
-  char *s21_str1 = (char *)str1;
-  char *s21_str2 = (char *)str2;
+  const char *s21_str1 = (const char *)str1;
+  const char *s21_str2 = (const char *)str2;
   int stop = 0;
   int status = 0;
-  do {
-    if (*s21_str1 - *s21_str2 != 0) {
+  while (stop == 0) {
+    if ((*s21_str1 == '\0' || *s21_str2 == '\0') || (*s21_str1 - *s21_str2 != 0)) {
       stop = 1;
+      if (*s21_str1 - *s21_str2 != 0) {
       status = *s21_str1 - *s21_str2;
+      }
+    } else {
+      s21_str1++;
+      s21_str2++;
     }
-  } while (stop == 0 && *s21_str1++ != '\0' && *s21_str2++ != '\0');
+  }
   return status;
 }
 
@@ -175,9 +180,6 @@ char *s21_strncpy(char *dest, const char *src, s21_size_t n) {
       *s21_dest++ = *s21_src++;
       i++;
     }
-    while (*s21_src++ != '\0') {
-      *s21_dest++ = '\0';
-    };
   }
   return dest;
 }
@@ -231,18 +233,18 @@ char *s21_strpbrk(const char *str1, const char *str2) {
   char *s21_str2 = (char *)str2;
   char *status = NULL;
   int stop = 0;
-  while (*s21_str2 != '\0' && stop == 0) {
-    while (*s21_str1 != '\0' && stop == 0) {
+  while (*s21_str1 != '\0' && stop == 0) {
+    while (*s21_str2 != '\0' && stop == 0) {
       if (*s21_str1 == *s21_str2) {
         stop = 1;
         status = s21_str1;
       }
-      s21_str1++;
+      s21_str2++;
     }
     if (stop == 0) {
       s21_str2 = (char *)str2;
     }
-    s21_str2++;
+    s21_str1++;
   }
   return status;
 }
