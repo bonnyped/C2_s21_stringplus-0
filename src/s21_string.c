@@ -55,7 +55,13 @@ void* s21_memcpy(void* dest, const void* src, s21_size_t n) {
 }
 
 void* s21_memmove(void* dest, const void* src, s21_size_t n) {
-  return memmove(dest, src, n);
+  char* src_copy = calloc (n, sizeof(char));
+
+  s21_memcpy(src_copy, src, n);
+  s21_memcpy(dest, src_copy, n);
+  free(src_copy);
+
+  return dest;
 }
 
 void* s21_memset(void* str, int c, s21_size_t n) {
@@ -78,7 +84,6 @@ char* s21_strcat(char* dest, const char* src) {
   for (; src[i] != '\0'; i++) {
     dest[len + i] = src[i];
   }
-
   dest[len + i] = '\0';
 
   return dest;

@@ -1,0 +1,41 @@
+#suite memmove_test
+
+#test memmove_test_1
+  const char* t1 = "string_test num 1";
+  char q1[100] = {'\0'};
+  char Q1[100] = {'\0'};
+  ck_assert_str_eq(memmove(q1, t1, 10), s21_memmove(Q1, t1, 10));
+
+#test memmove_test_2
+  const char* t2 = "str\0ing_test num 2";
+  char q2[100] = {'\0'};
+  char Q2[100] = {'\0'};
+  ck_assert_str_eq(memmove(q2, t2, 10), s21_memmove(Q2, t2, 10));
+
+#test memmove_test_3
+  const char* t3 = "str\0ing_test num 3";
+  char q3[100] = "STR\0ING_TEST NUM 3";
+  char Q3[100] = "STR\0ING_TEST NUM 3";
+  ck_assert_str_eq(memmove(q3 + 2, t3, 5), s21_memmove(Q3 + 2, t3, 5));
+
+#test memmove_test_4
+  const char* t4 = "str\0ing_test num 4";
+  char q4[100] = "STRING_TEST NUM 4";
+  char Q4[100] = "STRING_TEST NUM 4";
+  ck_assert_str_eq(memmove(q4 + 2, t4, 5), s21_memmove(Q4 + 2, t4, 5));
+
+#test memmove_test_5
+  const char* t5 = "string_test num 5";
+  char q5[100] = "STRING_TEST NUM 5";
+  char Q5[100] = "STRING_TEST NUM 5";
+  ck_assert_str_eq(memmove(q5 + 2, t5, 5), s21_memmove(Q5 + 2, t5, 5));
+
+#test memmove_test_6
+  char q6[] = "1234567890";
+  char Q6[] = "1234567890";
+  ck_assert_str_eq(memmove(q6 + 2, q6 + 1, 5), s21_memmove(Q6 + 2, Q6 + 1, 5));
+
+#test memmove_test_7
+  char q7[] = "1234567890";
+  char Q7[] = "1234567890";
+  ck_assert_str_eq(memmove(q7 + 4, q7, 5), s21_memmove(Q7 + 4, Q7, 5));
