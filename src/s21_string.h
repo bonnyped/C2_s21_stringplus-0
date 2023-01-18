@@ -3,12 +3,14 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <ctype.h>
 
 #define s21_size_t unsigned long long
 #define s21_NULL (void *)0
 #if defined(__linux__)
 #define UNKNOWN_ERROR "Unknown error "
 #define ARRAY_SIZE 133
+#define BUFFSIZE 100
 #define s21_error                                                              \
   {                                                                            \
     "Success", "Operation not permitted", "No such file or directory",         \
@@ -146,7 +148,7 @@ s21_size_t s21_strcspn(const char *str1, const char *str2);
 char *s21_strerror(int errnum);
 s21_size_t s21_strlen(const char *str);
 char *s21_strpbrk(const char *str1, const char *str2);
-char *s21_strrchr(const char *str, int c);
+char *s21_strrchr(const char *str, int ch);
 s21_size_t s21_strspn(const char *str1, const char *str2);
 char *s21_strstr(const char *haystack, const char *needle);
 char *s21_strtok(char *str, const char *delim);

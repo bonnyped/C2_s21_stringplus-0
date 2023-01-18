@@ -1,0 +1,12 @@
+#suite strstr_test
+
+#test strstr_test_1
+  ck_assert_ptr_eq(strstr("What the mind of man can comprehend and believe he is capable of achieving", "hat th"), s21_strstr("What the mind of man can comprehend and believe he is capable of achieving", "hat th"));
+
+#test strstr_test_2
+  ck_assert_ptr_eq(strstr("What the mind of man can comprehend and believe he is capable of achieving", "123"), s21_strstr("What the mind of man can comprehend and believe he is capable of achieving", "123"));
+
+#test strstr_test_3
+  char work_string[BUFFSIZE] = "/,,";
+
+  ck_assert_ptr_eq(strstr(work_string, ","), s21_strstr(work_string, ","));

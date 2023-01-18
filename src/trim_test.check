@@ -1,0 +1,11 @@
+#suite trim_test
+
+#test trim_test_1
+  char work_string[BUFFSIZE] = "-*-qwer-*-";
+  char work_string1[BUFFSIZE] = "-*";
+  ck_assert_str_eq("qwer", s21_trim(work_string, work_string1));
+
+#test trim_test_2
+  char work_string[BUFFSIZE] = "-*-qwer-*-";
+  char work_string1[BUFFSIZE] = "";
+  ck_assert_str_eq("-*-qwer-*-", s21_trim(work_string, work_string1));

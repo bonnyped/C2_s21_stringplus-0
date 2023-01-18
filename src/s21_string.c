@@ -247,14 +247,220 @@ char *s21_strpbrk(const char *str1, const char *str2) {
   return status;
 }
 
-char *s21_strrchr(const char *str, int c) { return strrchr(str, c); }
-
-s21_size_t s21_strspn(const char *str1, const char *str2) {
-  return strspn(str1, str2);
+char* s21_strrchr(const char *str, int ch){
+    char *pointer = s21_NULL;
+    if(str && ch >= 0 && ch <= 255 ){
+        int i = 0;
+        while(str[i] != '\0'){
+            if(str[i] == ch){
+                pointer = (char*)str + i;
+            }
+            i++;
+        }
+    }
+    return pointer;
 }
 
-char *s21_strstr(const char *haystack, const char *needle) {
-  return strstr(haystack, needle);
+s21_size_t s21_strspn(const char *str, const char *accept){
+    s21_size_t result = 0;
+    for(s21_size_t i = 0; i < s21_strlen(str); i++){
+        s21_size_t match = 0;
+        for(s21_size_t j = 0; j < s21_strlen(accept); j++){
+        if(str[i] == accept[j]){
+            result++;
+            match++;
+            j = s21_strlen(accept);
+        } else if (j == (s21_strlen(accept) - 1) && match == 0){
+            i = s21_strlen(str);
+        }
+    }
+}
+    return result;
 }
 
-char *s21_strtok(char *str, const char *delim) { return strtok(str, delim); }
+char *s21_strstr(const char* str1, const char *str2){
+    char *pointer = s21_NULL;
+    char *tmp = s21_NULL;
+    s21_size_t length_str1 = s21_strlen(str1);
+    s21_size_t length_str2 = s21_strlen(str2);
+    s21_size_t capacity = 0;
+    for(s21_size_t i = 0; i < length_str1; i++){
+        for(s21_size_t j = 0; j < length_str2; j++){
+            if(!tmp) { 
+                if(str1[i + j] == str2[j]){
+                tmp = (char*)(str1 + i + j);
+                capacity++;
+                if(j == length_str2 - 1){
+                    i = length_str1;
+                    }
+                } else {
+                    j = length_str2;
+                } 
+            }
+            if((tmp && j != 0 && length_str2 > 1) || (tmp && length_str2 == 1)){
+            if(str1[i + j] == str2[j]){
+                capacity++;
+            }
+            if(j != length_str2 - 1 && str1[i + j] != str2[j]){
+                tmp = s21_NULL;
+                i = i + j;
+                j = length_str2;
+            }
+            if((capacity == length_str2 - 1 && length_str2 > 1) || (tmp && length_str2 == 1)){
+                pointer = tmp;
+            }
+            }
+        }
+    }
+    return pointer;
+}
+
+char *s21_strtok(char* str1, const char* str2){
+    char *pointer = str1;
+    static char *static_pointer;
+    s21_size_t length_str1;
+    s21_size_t length_str2 = s21_strlen(str2);
+    if(pointer) {
+        length_str1 = s21_strlen(pointer);
+     } else {
+        if(static_pointer){
+        pointer = static_pointer;
+        length_str1 = s21_strlen(pointer);
+        }
+     }
+     if(pointer){
+    for(s21_size_t i = 0; i < length_str1; i++){
+        for(s21_size_t j = 0; j < length_str2; j++){
+            if(pointer[i] == str2[j] && i != 0){
+                pointer[i] = '\0';
+                static_pointer = &pointer[i + 1];
+                i = length_str1;
+                j = length_str2;
+            } else if(pointer[i] == str2[j] && i == 0){
+                pointer = &pointer[i + 1];
+                i--;
+                if(*pointer == '\0'){
+                    pointer = s21_NULL;
+                    i = length_str1;
+                    j =length_str2;
+                }
+            }
+        }
+        if(i == length_str1 - 1){
+            static_pointer = s21_NULL;
+        } 
+    }
+     }
+    return pointer;
+}
+
+void *s21_to_upper(const char *str) {
+  char *src = s21_NULL;
+  if (str) {
+    s21_size_t capacity = s21_strlen(str);
+    src = calloc(capacity + 1, sizeof(char));
+
+    if (src) {
+      for (s21_size_t i = 0; i < capacity; i++) {
+        if (str[i] >= 97 && str[i] <= 122) {
+          src[i] = str[i] - 32;
+          } else {
+            src[i] = str[i];
+          }
+          if (i == capacity - 1) {
+              src[i + 1] = '\0';
+          }
+      }
+    }
+  }
+
+  return src;
+}
+
+void *s21_to_lower(const char *str){
+    char *src = s21_NULL;
+    if(str){
+        s21_size_t capacity = s21_strlen(str);
+        src = calloc(capacity + 1, sizeof(char));
+        if(src){
+        for(s21_size_t i = 0; i < capacity; i++){
+            if(str[i] >= 65 && str[i] <= 90){
+                src[i] = str[i] + 32;
+            } else {
+                src[i] = str[i];
+            }
+            if(i == capacity - 1){
+                src[i + 1] = '\0';
+            }
+        }
+    }
+    }
+    return src;
+}
+
+void *s21_insert(const char *src, const char *str, s21_size_t start_index){
+    char *srcstr = s21_NULL;
+    if(src && str){
+        s21_size_t length_src, length_str;
+        s21_size_t count = 0;
+        s21_size_t start_index_for_strsrc = 0;
+        length_src = s21_strlen(src);
+        length_str = s21_strlen(str);
+        if(start_index <= length_src){
+        srcstr = calloc(length_src + length_str + 1, sizeof(char));
+        if(length_str > 0){
+        if(srcstr){
+            for(s21_size_t i = 0; i < length_src + length_str; i++){
+                if(i == start_index){
+                    for(s21_size_t j = 0; j < length_str; j++){
+                        srcstr[start_index + j] = str[j];
+                        count++;
+                    }
+                    start_index_for_strsrc = start_index + count;
+                } else {
+                count > 0 ? (srcstr[start_index_for_strsrc] = src[i - 1]) : (srcstr[start_index_for_strsrc] = src[i]);
+                start_index_for_strsrc++;
+                if(i == length_str +length_src - 1){
+                    srcstr[start_index_for_strsrc + i + 1] = '\0';
+                }
+            }
+            }
+        }
+        } else if(length_str == 0){
+            srcstr = (char*)src;
+        }
+    }
+    }
+    return srcstr;
+}
+
+void *s21_trim(const char *src, const char *trim_chars){
+    char *str = s21_NULL;
+    if(src && trim_chars){
+        s21_size_t length_src = s21_strlen(src);
+        s21_size_t length_trim_chars = s21_strlen(trim_chars);
+        if(length_trim_chars > 0){
+        s21_size_t start_index_trimed_buffer = 0;
+        char *trimed_buffer = calloc(length_src + 1, sizeof(char));
+        for(s21_size_t i = 0; i < length_src; i++){
+            for(s21_size_t j = 0; j < length_trim_chars; j++){
+                if(src[i] == trim_chars[j]){
+                    j = length_trim_chars;
+                    trimed_buffer[start_index_trimed_buffer] = trim_chars[j];
+                }
+                if(j == length_trim_chars - 1 && src[i] != trim_chars[j]){
+                    trimed_buffer[start_index_trimed_buffer] = src[i];
+                    start_index_trimed_buffer++;
+                }
+            }
+            if(i == length_src - 1){
+                start_index_trimed_buffer = 0;
+            }
+            }
+        str = trimed_buffer;
+    } else {
+        str = (char*)src;
+    }
+        }
+    return str;
+}

@@ -1,0 +1,6 @@
+#suite strrchr_test
+
+#test strrchr_test_1
+  char work_string[100] = "What the mind of man can comprehend and believe he is capable of achieving";
+
+  ck_assert_ptr_eq(strrchr(work_string, 97), s21_strrchr(work_string, 97));

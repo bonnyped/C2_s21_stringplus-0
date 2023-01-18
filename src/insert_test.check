@@ -1,0 +1,16 @@
+#suite insert_test
+
+#test insert_test_1
+  char src[BUFFSIZE] = "AAA";
+  char str[BUFFSIZE] = "b";
+  ck_assert_str_eq("bAAA", s21_insert(src, str, 0));
+
+#test insert_test_2
+  char src[BUFFSIZE] = "AAA";
+  char str[BUFFSIZE] = "";
+  ck_assert_str_eq("AAA", s21_insert(src, str, 0));
+
+#test insert_test_3
+  char src[BUFFSIZE] = "AAA";
+  char str[BUFFSIZE] = "b";
+  ck_assert_ptr_null(s21_insert(src, str, 5));
