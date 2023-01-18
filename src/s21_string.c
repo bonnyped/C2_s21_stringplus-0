@@ -71,11 +71,31 @@ void* s21_memset(void* str, int c, s21_size_t n) {
 }
 
 char* s21_strcat(char* dest, const char* src) {
-  return strcat(dest, src);
+  s21_size_t len = 0;
+  s21_size_t i = 0;
+
+  len = s21_strlen(dest);
+  for (; src[i] != '\0'; i++) {
+    dest[len + i] = src[i];
+  }
+
+  dest[len + i] = '\0';
+
+  return dest;
 }
 
 char* s21_strncat(char* dest, const char* src, s21_size_t n) {
-  return strncat(dest, src, n);
+  s21_size_t len = 0;
+  s21_size_t i = 0;
+  
+  len = s21_strlen(dest);
+  for (; (i < n) && (src[i] != '\0'); i++) {
+    dest[len + i] = src[i];
+  }
+
+  dest[len + i] = '\0';
+
+  return dest;
 }
 
 char* s21_strchr(const char* str, int c) {
