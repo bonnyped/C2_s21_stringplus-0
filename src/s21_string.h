@@ -21,7 +21,7 @@
         "Text file busy", "File too large", "No space left on device",         \
         "Illegal seek", "Read-only file system", "Too many links",             \
         "Broken pipe", "Numerical argument out of domain",                     \
-        'Numerical result out of range', "Resource deadlock avoided",          \
+        "Numerical result out of range", "Resource deadlock avoided",          \
         "File name too long", "No locks available",                            \
         "Function not implemented", "Directory not empty",                     \
         "Too many levels of symbolic links", "Unknown error 41",               \
