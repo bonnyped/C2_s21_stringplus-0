@@ -6,11 +6,11 @@
 
   ck_assert_pstr_eq(strpbrk(str1, str2), strpbrk(str1, str2));
 
-//#test strpbrk_test_2
-//  char *str3 = "hellohamlet";
-//  char *str4 = "tl";
-//
-//  ck_assert_pstr_eq(strpbrk(str3, str4), s21_strpbrk(str3, str4));
+#test strpbrk_test_2
+  char *str3 = "hellohamlet";
+  char *str4 = "tl";
+
+  ck_assert_pstr_eq(strpbrk(str3, str4), s21_strpbrk(str3, str4));
 
 #test strpbrk_test_3
   char *str5 = "hellohamlet";

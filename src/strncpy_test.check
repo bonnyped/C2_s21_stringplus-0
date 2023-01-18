@@ -36,8 +36,8 @@
   char Q4[100] = "STRING_TEST NUM 4";
   ck_assert_str_eq(strncpy(q4 + 2, t4, 5), s21_strncpy(Q4 + 2, t4, 5));
 
-//#test strncpy_test_7
-//  const char* t5 = "string_test num 5";
-//  char q5[100] = "STRING_TEST NUM 5";
-//  char Q5[100] = "STRING_TEST NUM 5";
-//  ck_assert_str_eq(strncpy(q5 + 2, t5, 5), s21_strncpy(Q5 + 2, t5, 5));
+#test strncpy_test_7
+  const char* t5 = "string_test num 5";
+  char q5[100] = "STRING_TEST NUM 5";
+  char Q5[100] = "STRING_TEST NUM 5";
+  ck_assert_str_eq(strncpy(q5 + 2, t5, 5), s21_strncpy(Q5 + 2, t5, 5));
