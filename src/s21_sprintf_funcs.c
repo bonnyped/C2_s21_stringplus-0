@@ -119,7 +119,7 @@ void print_octal(long unsigned int number, int precision, int width,
     }
     if (precision != 0 || number != 0) {
       reverse_string(tmp + prefix);
-      print_string(tmp, dst, 0, 0, 0, pading_symbol);
+      print_string(tmp, dst, -1, 0, 0, pading_symbol);
     }
     if (width > printed_len && right_padding) {
       add_padding(width - (printed_len), pading_symbol, dst);
@@ -166,7 +166,7 @@ void print_hexadecimal(long unsigned int number, int precision, int width,
     }
     int printed_len = s21_strlen(tmp);
     if (pointer && number == 0) {
-      print_string("(nil)", tmp, 0, 0, 0, pading_symbol);
+      print_string("(nil)", tmp, -1, 0, 0, pading_symbol);
       printed_len = s21_strlen("(nil)");
     }
     if (precision > 0 && precision > printed_len) {
@@ -187,7 +187,7 @@ void print_hexadecimal(long unsigned int number, int precision, int width,
       if (number != 0) {
         reverse_string(tmp + prefix * 2);
       }
-      print_string(tmp, dst, 0, 0, 0, pading_symbol);
+      print_string(tmp, dst, -1, 0, 0, pading_symbol);
     }
     if (width > printed_len && right_padding) {
       add_padding(width - (printed_len), ' ', dst);
@@ -332,7 +332,7 @@ void print_double(long double num, int precision, int width, int right_padding,
         fract_part = fract_part + 0.5 * powl(10, -precision);
       }
       print_fractional_float(fract_part, precision, 0, tmp);
-      print_string(tmp, dst, 0, 0, 0, pading_symbol);
+      print_string(tmp, dst, -1, 0, 0, pading_symbol);
       free(tmp);
     }
     if (width > precision + whole_len + 1 +
@@ -353,7 +353,7 @@ int check_special_float_nums(long double num, char* dst) {
     } else {
       print_char('-', dst, 0, 0, ' ');
     }
-    print_string("nan", dst, 0, 0, 0, ' ');
+    print_string("nan", dst, -1, 0, 0, ' ');
     result = 1;
   } else if (isinf(num)) {
     if (signbit(num) == 0) {
@@ -361,7 +361,7 @@ int check_special_float_nums(long double num, char* dst) {
     } else {
       print_char('-', dst, 0, 0, ' ');
     }
-    print_string("inf", dst, 0, 0, 0, ' ');
+    print_string("inf", dst, -1, 0, 0, ' ');
     result = 1;
   }
   return result;
