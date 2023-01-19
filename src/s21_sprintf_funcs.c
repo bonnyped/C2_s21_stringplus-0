@@ -204,7 +204,8 @@ void print_hexadecimal(long unsigned int number, int precision, int width,
     tmp[0] = 0;
     if (prefix && number != 0) {
       print_char('0', tmp, 0, 0, pading_symbol);
-      print_char('x', tmp, 0, 0, pading_symbol);
+      if (in_upper_case) { print_char('X', tmp, 0, 0, pading_symbol); 
+      } else {print_char('x', tmp, 0, 0, pading_symbol);}
     }
     if (number != 0) {
       for (long unsigned int num = number; num > 0; num = num / 16) {
@@ -231,7 +232,11 @@ void print_hexadecimal(long unsigned int number, int precision, int width,
       printed_len = s21_strlen(tmp);
     }
     if (width > printed_len && !right_padding) {
-      add_padding(width - (printed_len), pading_symbol, dst);
+      if (pading_symbol == '0') { 
+      add_padding(width - (printed_len), pading_symbol, tmp); 
+      } else {
+      add_padding(width - (printed_len), pading_symbol, dst); 
+      }
     }
     if (precision != 0 || number != 0) {
       if (number != 0) {
@@ -240,7 +245,7 @@ void print_hexadecimal(long unsigned int number, int precision, int width,
       print_string(tmp, dst, 0, 0, 0, pading_symbol);
     }
     if (width > printed_len && right_padding) {
-      add_padding(width - (printed_len), pading_symbol, dst);
+      add_padding(width - (printed_len), ' ', dst);
     }
     free(tmp);
   }
