@@ -35,7 +35,7 @@ void add_padding(int num, char pading_symbol, char* dst) {
 void print_string(char* string, char* dst, int precision, int width,
                   int right_padding, char pading_symbol) {
   s21_size_t str_len;
-  if (precision == 0) {
+  if (precision == -1) {
     str_len = s21_strlen(string);
   } else {
     str_len = precision;
@@ -43,7 +43,7 @@ void print_string(char* string, char* dst, int precision, int width,
   if ((int)str_len < width && !right_padding) {
     add_padding(width - str_len, pading_symbol, dst);
   }
-  if (precision == 0) {
+  if (precision == -1) {
     s21_strcat(dst, string);
   } else {
     s21_strncat(dst, string, precision);

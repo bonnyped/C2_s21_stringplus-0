@@ -45,8 +45,7 @@ pattern init_pattern(int data_type) {
   result.type = data_type;
   switch (data_type) {
     case TYPE_STRING:
-      result.precision = 0;
-      result.width = -1;
+      result.precision = -1;
       break;
     case TYPE_FLOAT:
       result.precision = 6;
