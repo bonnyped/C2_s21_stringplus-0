@@ -8,23 +8,26 @@
 /*%% template
 * DELETE 1, 0 FROM PRINT CHAR MAKE MACRO!
 WCHAR_T
-
+MANY FUNCS CODE DUP PROBLEM CAN BE SOLVED WITH CAST TO HIGHER TYPE AND BACKCAST
+IN FUNCTION
 */
 
-void print_char(char symb, char* dst, int width, int right_padding) {
+void print_char(char symb, char* dst, int width, int right_padding,
+                char pading_symbol) {
   char source[2];
   source[0] = symb;
   source[1] = 0;
   if (width > 1 && !right_padding) {
-    add_padding(width - 1, dst);
+    add_padding(width - 1, pading_symbol, dst);
   }
   s21_strcat(dst, source);
   if (width > 1 && right_padding) {
-    add_padding(width - 1, dst);
+    add_padding(width - 1, pading_symbol, dst);
   }
 }
 // NOT RDY YET
-void print_long_char(wchar_t symb, char* input_dst) {
+void print_long_char(wchar_t symb, char* input_dst, int width,
+                     int right_padding, wchar_t pading_symbol) {
   wchar_t* dst = (wchar_t*)input_dst;
   wchar_t source[2];
   source[0] = symb;
@@ -32,17 +35,26 @@ void print_long_char(wchar_t symb, char* input_dst) {
   while (*dst != 0) {
     dst++;
   }
+  if (width > 1 && !right_padding) {
+    add_long_padding(width - 1, pading_symbol, (char*)dst);
+  }
   s21_memcpy(dst, source, sizeof(wchar_t) * 2);
 }
 
-void add_padding(int num, char* dst) {
+void add_padding(int num, char pading_symbol, char* dst) {
   for (int i = 0; i < num; i++) {
-    print_char(' ', dst, 1, 0);
+    print_char(pading_symbol, dst, 1, 0, pading_symbol);
+  }
+}
+
+void add_long_padding(int num, wchar_t pading_symbol, char* dst) {
+  for (int i = 0; i < num; i++) {
+    print_long_char(pading_symbol, dst, 1, 0, pading_symbol);
   }
 }
 
 void print_string(char* string, char* dst, int precision, int width,
-                  int right_padding) {
+                  int right_padding, char pading_symbol) {
   s21_size_t str_len;
   if (precision == 0) {
     str_len = s21_strlen(string);
@@ -50,7 +62,7 @@ void print_string(char* string, char* dst, int precision, int width,
     str_len = precision;
   }
   if ((int)str_len < width && !right_padding) {
-    add_padding(width - str_len, dst);
+    add_padding(width - str_len, pading_symbol, dst);
   }
   if (precision == 0) {
     s21_strcat(dst, string);
@@ -58,15 +70,49 @@ void print_string(char* string, char* dst, int precision, int width,
     s21_strncat(dst, string, precision);
   }
   if ((int)str_len < width && right_padding) {
-    add_padding(width - str_len, dst);
+    add_padding(width - str_len, pading_symbol, dst);
+  }
+}
+
+void print_long_string(char* string, char* dst, int precision, int width,
+                       int right_padding, wchar_t pading_symbol) {
+  wchar_t* wstring = (wchar_t*)string;
+  wchar_t* wdst = (wchar_t*)dst;
+  wchar_t end_of_str = '\0';
+  s21_size_t str_len;
+  if (precision == 0) {
+    int i = 0;
+    wchar_t* tmp = wstring;
+    for (int i = 0; *tmp != end_of_str; tmp++, i++) {
+    }
+    str_len = i;
+  } else {
+    str_len = precision;
+  }
+  if ((int)str_len < width && !right_padding) {
+    add_long_padding(width - str_len, pading_symbol, (char*)wdst);
+  }
+  if (precision == 0) {
+    for (int i = 0; *wstring != end_of_str; wstring++, i++) {
+      print_long_char(*wstring, (char*)wdst, width, right_padding,
+                      pading_symbol);
+    }
+  } else {
+    for (int i = 0; i < precision; wstring++, i++) {
+      print_long_char(*wstring, (char*)wdst, width, right_padding,
+                      pading_symbol);
+    }
+  }
+  if ((int)str_len < width && right_padding) {
+    add_long_padding(width - str_len, pading_symbol, (char*)wdst);
   }
 }
 
 // precision 0 number 0, widdth >0?
 // minus sign width and prec check!!
 void print_int(void* number, int precision, int width, int right_padding,
-               int plus_sgn, int minus_sgn, int space_symbol, char* dst,
-               int type) {
+               char pading_symbol, int plus_sgn, int minus_sgn,
+               int space_symbol, char* dst, int type) {
   s21_size_t array_len = number_length(number, type);
   char* array = s21_NULL;
   if (precision != 0 || (precision == 0 && !is_zero(number, type))) {
@@ -76,67 +122,156 @@ void print_int(void* number, int precision, int width, int right_padding,
   int printing_len = precision > (int)array_len ? precision : (int)array_len;
   printing_len += (plus_sgn || space_symbol || (minus_sgn && number_sgn == -1));
   if (width > printing_len && !right_padding) {
-    add_padding(width - (printing_len), dst);
+    add_padding(width - (printing_len), pading_symbol, dst);
   }
-  if (array != NULL) {
+  if (array != s21_NULL) {
     int_to_chars(number, array_len, array, type);
 
     print_sign(plus_sgn, minus_sgn, space_symbol, number_sgn, dst);
     if (precision > 0 && precision > (int)array_len) {
       int difference = precision - (int)array_len;
       for (; difference > 0; difference--) {
-        print_char('0', dst, 1, 0);
+        print_char('0', dst, 1, 0, pading_symbol);
       }
     }
     for (int i = 0; i < (int)array_len; i++) {
-      print_char(array[i], dst, 1, 0);
+      print_char(array[i], dst, 1, 0, pading_symbol);
     }
     free(array);
   }
   if (width > printing_len && right_padding) {
-    add_padding(width - (printing_len), dst);
+    add_padding(width - (printing_len), pading_symbol, dst);
   }
+}
+
+void print_octal(long unsigned int number, int precision, int width,
+                 int right_padding, char pading_symbol, int prefix, char* dst) {
+  int num_width = precision > width ? precision : width;
+  char* tmp = malloc(sizeof(char) * (40 + num_width));
+  if (tmp != s21_NULL) {
+    tmp[0] = 0;
+    if (prefix && number != 0) {
+      print_char('0', tmp, 0, 0, pading_symbol);
+    }
+    if (number != 0) {
+      for (long unsigned int num = number; num > 0; num = num / 8) {
+        int digit = num % 8;
+        print_char(digit + '0', tmp, 0, 0, pading_symbol);
+      }
+    } else {
+      print_char('0', tmp, 0, 0, pading_symbol);
+    }
+    int printed_len = s21_strlen(tmp);
+    if (precision > 0 && precision > printed_len) {
+      int difference = precision - printed_len;
+      for (; difference > 0; difference--) {
+        print_char('0', tmp, 1, 0, pading_symbol);
+      }
+      printed_len = s21_strlen(tmp);
+    }
+    if (width > printed_len && !right_padding) {
+      add_padding(width - (printed_len), pading_symbol, dst);
+    }
+    if (precision != 0 || number != 0) {
+      reverse_string(tmp + prefix);
+      print_string(tmp, dst, 0, 0, 0, pading_symbol);
+    }
+    if (width > printed_len && right_padding) {
+      add_padding(width - (printed_len), pading_symbol, dst);
+    }
+    free(tmp);
+  }
+}
+
+void reverse_string(char* str) {
+  int left = 0;
+  int right = s21_strlen(str) - 1;
+  while (left < right) {
+    char tmp = str[left];
+    str[left] = str[right];
+    str[right] = tmp;
+    left++;
+    right--;
+  }
+}
+
+void print_hexadecimal(long unsigned int number, int precision, int width,
+                       int right_padding, char pading_symbol, int prefix,
+                       int in_upper_case, int pointer, char* dst) {
+  int num_width = precision > width ? precision : width;
+  char* tmp = malloc(sizeof(char) * (40 + num_width));
+  if (tmp != s21_NULL) {
+    tmp[0] = 0;
+    if (prefix && number != 0) {
+      print_char('0', tmp, 0, 0, pading_symbol);
+      print_char('x', tmp, 0, 0, pading_symbol);
+    }
+    if (number != 0) {
+      for (long unsigned int num = number; num > 0; num = num / 16) {
+        int digit = num % 16;
+        print_char(hex_char_from_num(digit, in_upper_case), tmp, 0, 0,
+                   pading_symbol);
+      }
+    } else {
+      print_char('0', tmp, 0, 0, pading_symbol);
+    }
+    int printed_len = s21_strlen(tmp);
+    int expected_len = sizeof(void*) * 2;
+    if (pointer && printed_len < expected_len) {
+      for (int i = expected_len - printed_len; i > 0; i--) {
+        print_char('0', tmp, 0, 0, pading_symbol);
+      }
+      printed_len = s21_strlen(tmp);
+    }
+    if (precision > 0 && precision > printed_len) {
+      int difference = precision - printed_len;
+      for (; difference > 0; difference--) {
+        print_char('0', tmp, 1, 0, pading_symbol);
+      }
+      printed_len = s21_strlen(tmp);
+    }
+    if (width > printed_len && !right_padding) {
+      add_padding(width - (printed_len), pading_symbol, dst);
+    }
+    if (precision != 0 || number != 0) {
+      if (number != 0) {
+        reverse_string(tmp + prefix * 2);
+      }
+      print_string(tmp, dst, 0, 0, 0, pading_symbol);
+    }
+    if (width > printed_len && right_padding) {
+      add_padding(width - (printed_len), pading_symbol, dst);
+    }
+    free(tmp);
+  }
+}
+
+char hex_char_from_num(int num, int capital) {
+  char result = 0;
+  if (num < 10) {
+    result = '0' + num;
+  } else {
+    if (!capital) {
+      result = 'a' + (num - 10);
+    } else {
+      result = 'A' + (num - 10);
+    }
+  }
+  return result;
 }
 
 void int_to_chars(void* input, int number_length, char* array, int type) {
   int i = number_length - 1;
-  if (type == TYPE_INT) {
-    int number = *(int*)input;
-    do {
-      int digit = number % 10;
-      array[i--] = '0' + abs(digit);
-      number /= 10;
-    } while (number != 0);
-  } else if (type == TYPE_LONG_INT) {
+  if (type == TYPE_INT || type == TYPE_SHORT_INT || type == TYPE_LONG_INT) {
     long int number = *(long int*)input;
     do {
       int digit = number % 10;
       array[i--] = '0' + abs(digit);
       number /= 10;
     } while (number != 0);
-  } else if (type == TYPE_SHORT_INT) {
-    short int number = *(short int*)input;
-    do {
-      int digit = number % 10;
-      array[i--] = '0' + abs(digit);
-      number /= 10;
-    } while (number != 0);
-  } else if (type == TYPE_UNSIGNED_INT) {
-    unsigned int number = *(unsigned int*)input;
-    do {
-      int digit = number % 10;
-      array[i--] = '0' + digit;
-      number /= 10;
-    } while (number != 0);
-  } else if (type == TYPE_LONG_UNSIGNED_INT) {
+  } else if (type == TYPE_UNSIGNED_INT || type == TYPE_SHORT_UNSIGNED_INT ||
+             type == TYPE_LONG_UNSIGNED_INT) {
     unsigned long int number = *(unsigned long int*)input;
-    do {
-      int digit = number % 10;
-      array[i--] = '0' + digit;
-      number /= 10;
-    } while (number != 0);
-  } else if (type == TYPE_SHORT_UNSIGNED_INT) {
-    unsigned short int number = *(unsigned short int*)input;
     do {
       int digit = number % 10;
       array[i--] = '0' + digit;
@@ -147,43 +282,16 @@ void int_to_chars(void* input, int number_length, char* array, int type) {
 
 s21_size_t number_length(void* input, int type) {
   s21_size_t result = 0;
-  if (type == TYPE_INT) {
-    int number = *(int*)input;
-    if (number == 0) {
-      result = 1;
-    }
-    for (; number != 0; number /= 10, result++) {
-    }
-  } else if (type == TYPE_LONG_INT) {
+  if (type == TYPE_INT || type == TYPE_LONG_INT || type == TYPE_SHORT_INT) {
     long int number = *(long int*)input;
     if (number == 0) {
       result = 1;
     }
     for (; number != 0; number /= 10, result++) {
     }
-  } else if (type == TYPE_SHORT_INT) {
-    short int number = *(short int*)input;
-    if (number == 0) {
-      result = 1;
-    }
-    for (; number != 0; number /= 10, result++) {
-    }
-  } else if (type == TYPE_UNSIGNED_INT) {
-    unsigned int number = *(unsigned int*)input;
-    if (number == 0) {
-      result = 1;
-    }
-    for (; number != 0; number /= 10, result++) {
-    }
-  } else if (type == TYPE_LONG_UNSIGNED_INT) {
+  } else if (type == TYPE_UNSIGNED_INT || type == TYPE_LONG_UNSIGNED_INT ||
+             type == TYPE_SHORT_UNSIGNED_INT) {
     unsigned long int number = *(unsigned long int*)input;
-    if (number == 0) {
-      result = 1;
-    }
-    for (; number != 0; number /= 10, result++) {
-    }
-  } else if (type == TYPE_SHORT_UNSIGNED_INT) {
-    unsigned short int number = *(unsigned short int*)input;
     if (number == 0) {
       result = 1;
     }
@@ -195,21 +303,9 @@ s21_size_t number_length(void* input, int type) {
 
 int get_int_sign(void* number, int type) {
   int result = 1;
-  if (type == TYPE_INT) {
+  if (type == TYPE_INT || type == TYPE_LONG_INT || type == TYPE_SHORT_INT) {
     int zero = 0;
     if (*(int*)number < zero) {
-      result = -1;
-    }
-  }
-  if (type == TYPE_LONG_INT) {
-    long int zero = 0;
-    if (*(long int*)number < zero) {
-      result = -1;
-    }
-  }
-  if (type == TYPE_SHORT_INT) {
-    short int zero = 0;
-    if (*(short int*)number < zero) {
       result = -1;
     }
   }
@@ -219,47 +315,24 @@ int get_int_sign(void* number, int type) {
 void print_sign(int plus_sgn, int minus_sgn, int space_symbol, int sgn,
                 char* dst) {
   if ((sgn == -1 && minus_sgn)) {
-    print_char('-', dst, 1, 0);
+    print_char('-', dst, 1, 0, ' ');
   } else if (plus_sgn) {
-    print_char('+', dst, 1, 0);
+    print_char('+', dst, 1, 0, ' ');
   } else if (space_symbol) {
-    print_char(' ', dst, 1, 0);
+    print_char(' ', dst, 1, 0, ' ');
   }
 }
 
 int is_zero(void* number, int type) {
   int result = 0;
-  if (type == TYPE_INT) {
-    int zero = 0;
-    if (*(int*)number == zero) {
-      result = 1;
-    }
-  }
-  if (type == TYPE_UNSIGNED_INT) {
-    unsigned int zero = 0;
-    if (*(unsigned int*)number == zero) {
-      result = 1;
-    }
-  }
-  if (type == TYPE_LONG_INT) {
+  if (type == TYPE_INT || type == TYPE_SHORT_INT || type == TYPE_LONG_INT) {
     long int zero = 0;
     if (*(long int*)number == zero) {
       result = 1;
     }
   }
-  if (type == TYPE_SHORT_INT) {
-    short int zero = 0;
-    if (*(short int*)number == zero) {
-      result = 1;
-    }
-  }
-  if (type == TYPE_SHORT_UNSIGNED_INT) {
-    unsigned short int zero = 0;
-    if (*(unsigned short int*)number == zero) {
-      result = 1;
-    }
-  }
-  if (type == TYPE_LONG_UNSIGNED_INT) {
+  if (type == TYPE_UNSIGNED_INT || type == TYPE_SHORT_UNSIGNED_INT ||
+      type == TYPE_LONG_UNSIGNED_INT) {
     unsigned long int zero = 0;
     if (*(unsigned long int*)number == zero) {
       result = 1;
@@ -269,20 +342,20 @@ int is_zero(void* number, int type) {
 }
 
 // prec+w+printing len check INF SGN
-void print_double(double num, int precision, int width, int right_padding,
-                  int plus_sgn, int space_symbol, char* dst) {
-  if (!check_special_float_nums(num, dst)) {
+void print_double(long double num, int precision, int width, int right_padding,
+                  char pading_symbol, int plus_sgn, int space_symbol,
+                  int point_forced, char* dst) {
+  if (!check_special_float_nums(num, dst)) {  // WIDTH & PREC FOR NANS!!!
     int number_sgn = 0;
     int whole_len;
     if (num < 0) {
       number_sgn = -1;
       num = -num;
     }
-    double tmpval;
-    double fract_part = modf(num, &tmpval);
-    double whole_part = tmpval;
+    long double whole_part;
+    long double fract_part = modfl(num, &whole_part);
     if (whole_part > 0) {
-      whole_len = log10f(whole_part) + 1;
+      whole_len = log10l(whole_part) + 1;
     } else {
       whole_len = 1;
     }
@@ -292,29 +365,24 @@ void print_double(double num, int precision, int width, int right_padding,
         !right_padding) {
       add_padding(width - (whole_len + 1 + precision +
                            (plus_sgn || space_symbol || number_sgn == -1)),
-                  dst);
+                  pading_symbol, dst);
     }
-    if (tmp != NULL) {
+    if (tmp != s21_NULL) {
       tmp[0] = 0;
       print_sign(plus_sgn, 1, space_symbol, number_sgn, tmp);
       if (whole_len > 1 || whole_part != 0) {
-        if (precision > 0) {
-          print_whole_float(whole_part, tmp);
-        } else {
-          int i_num = (int)(num + 0.5);
-          print_int(&i_num, 0, 0, 0, 0, 0, 0, dst, TYPE_INT);
-        }
+        print_whole_float(whole_part + 0.5, tmp);
       } else {
-        print_char('0', tmp, 1, 0);
+        print_char('0', tmp, 1, 0, pading_symbol);
       }
-      if (precision > 0) {
-        print_char('.', tmp, 1, 0);
+      if (precision > 0 || point_forced) {
+        print_char('.', tmp, 1, 0, pading_symbol);
       }
-      if ((int)(fract_part * pow(10, precision + 1)) % 10 >= 5) {
-        fract_part = fract_part + 0.5 * pow(10, -precision);
+      if ((int)(fract_part * powl(10, precision + 1)) % 10 >= 5) {
+        fract_part = fract_part + 0.5 * powl(10, -precision);
       }
       print_fractional_float(fract_part, precision, 0, tmp);
-      print_string(tmp, dst, 0, 0, 0);
+      print_string(tmp, dst, 0, 0, 0, pading_symbol);
       free(tmp);
     }
     if (width > precision + whole_len + 1 +
@@ -322,51 +390,127 @@ void print_double(double num, int precision, int width, int right_padding,
         right_padding) {
       add_padding(width - (whole_len + 1 + precision +
                            (plus_sgn || space_symbol || number_sgn == -1)),
-                  dst);
+                  pading_symbol, dst);
     }
   }
 }
 
-int check_special_float_nums(double num, char* dst) {
+int check_special_float_nums(long double num, char* dst) {
   int result = 0;
   if (isnan(num)) {
     if (signbit(num) == 0) {
-      print_char('+', dst, 0, 0);
+      print_char('+', dst, 0, 0, ' ');
     } else {
-      print_char('-', dst, 0, 0);
+      print_char('-', dst, 0, 0, ' ');
     }
-    print_string("nan", dst, 0, 0, 0);
+    print_string("nan", dst, 0, 0, 0, ' ');
     result = 1;
   } else if (isinf(num)) {
     if (signbit(num) == 0) {
-      print_char('+', dst, 0, 0);
+      print_char('+', dst, 0, 0, ' ');
     } else {
-      print_char('-', dst, 0, 0);
+      print_char('-', dst, 0, 0, ' ');
     }
-    print_string("inf", dst, 0, 0, 0);
+    print_string("inf", dst, 0, 0, 0, ' ');
     result = 1;
   }
   return result;
 }
 
-void print_fractional_float(float fractional, int precision, int plus_sgn,
+void print_fractional_float(long double fractional, int precision, int plus_sgn,
                             char* dst) {
   for (int i = 0; i < precision; i++) {
     fractional = fractional * 10;
     int digit = (int)(fractional);
-    print_int(&digit, 1, 0, 0, plus_sgn, 0, 0, dst, TYPE_INT);
+    print_int(&digit, 1, 0, 0, ' ', plus_sgn, 0, 0, dst, TYPE_INT);
     fractional = fractional - (int)fractional;
   }
 }
 
-void print_whole_float(double num, char* dst) {
+void print_whole_float(long double num, char* dst) {
   int digit;
-  for (int i = log10f(num); i >= 0; i--) {
-    double weight = pow(10.0, i);
+  for (int i = log10l(num); i >= 0; i--) {
+    double weight = powl(10.0, i);
     if (weight > 0 && !isinf(weight)) {
       digit = floor(num / weight);
       num -= (digit * weight);
-      print_int(&digit, 1, 0, 0, 0, 0, 0, dst, TYPE_INT);
+      print_int(&digit, 1, 0, 0, ' ', 0, 0, 0, dst, TYPE_INT);
     }
+  }
+}
+
+void print_double_scientific(long double num, int precision, int width,
+                             int right_padding, char pading_symbol,
+                             int plus_sgn, int space_symbol, int capital,
+                             int point_forced, char* dst) {
+  int number_sgn = 0;
+  if (num < 0) {
+    number_sgn = -1;
+    num = -num;
+  }
+  int power = log10l(num);
+  if (power < 0) {
+    power--;
+  }
+  int num_len = 7 + precision + (plus_sgn || space_symbol || number_sgn == -1);
+  if (width > num_len && !right_padding) {
+    add_padding(width - num_len, pading_symbol, dst);
+  }
+  print_sign(plus_sgn, 1, space_symbol, number_sgn, dst);
+  print_double(num / powl(10, power), precision, 0, 0, pading_symbol, 0, 0,
+               point_forced, dst);
+  if (capital) {
+    print_char('E', dst, 0, 0, pading_symbol);
+  } else {
+    print_char('e', dst, 0, 0, pading_symbol);
+  }
+  print_int(&power, 3, 0, 0, pading_symbol, 1, 1, 0, dst, TYPE_INT);
+  if (width > num_len && right_padding) {
+    add_padding(width - num_len, pading_symbol, dst);
+  }
+}
+
+// vezde LONG DOUBLE!!! PEW PEW
+void print_double_shortest(long double num, int precision, int width,
+                           int right_padding, char pading_symbol, int plus_sgn,
+                           int space_symbol, int capital, int point_forced,
+                           char* dst) {
+  // int number_sgn = 0;
+  int whole_len;
+  int real_precision = precision;
+  int num_of_preceding_zeros = 0;
+  long double original_num = num;
+  if (num < 0) {
+    // number_sgn = -1;
+    num = -num;
+  }
+  long double whole_part;
+  modfl(num, &whole_part);
+  if (whole_part >= 1.0) {
+    whole_len = log10l(whole_part) + 1;
+    real_precision = precision - whole_len;
+    if (real_precision < 0) {
+      real_precision = 0;
+    }
+  } else {
+    whole_len = 1;
+    for (; num < 1.0; num = num * 10, num_of_preceding_zeros++) {
+    }
+    num_of_preceding_zeros--;
+    real_precision += num_of_preceding_zeros;
+  }
+  int num_len_normal = whole_len + 1 + real_precision;
+  if (real_precision == 0) {
+    num_len_normal--;
+  }
+  int num_len_scientific = (precision) + 6;
+
+  if (num_len_scientific > num_len_normal) {
+    print_double(original_num, real_precision, width, right_padding,
+                 pading_symbol, plus_sgn, space_symbol, point_forced, dst);
+  } else {
+    print_double_scientific(original_num, precision - 1, width, right_padding,
+                            pading_symbol, plus_sgn, space_symbol, capital,
+                            point_forced, dst);
   }
 }

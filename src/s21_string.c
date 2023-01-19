@@ -1,5 +1,5 @@
 #include "s21_string.h"
-
+#define _CRT_SECURE_NO_WARNINGS
 #include <string.h>
 
 #include "s21_sprintf_parser.h"
@@ -76,10 +76,10 @@ int s21_sprintf(char* dst, const char* format_string, ...) {
   va_start(args, format_string);
   while (*format_string) {
     if (*format_string != '%') {
-      print_char(*format_string, dst, 1, 0);
+      print_char(*format_string, dst, 1, 0, ' ');
       format_string++;
     } else if (*(format_string + 1) == '%') {
-      print_char('%', dst, 1, 0);
+      print_char('%', dst, 1, 0, ' ');
       format_string = format_string + 2;
     } else {
       int data_type = get_format_type(format_string);
@@ -87,6 +87,12 @@ int s21_sprintf(char* dst, const char* format_string, ...) {
         format_string++;
         pattern executable_pattern = init_pattern(data_type);
         executable_pattern = read_pattern(&format_string, executable_pattern);
+        if (executable_pattern.width == READ_REQUIRED) {
+          executable_pattern.width = va_arg(args, int);
+        }
+        if (executable_pattern.precision == READ_REQUIRED) {
+          executable_pattern.precision = va_arg(args, int);
+        }
         execute_pattern(data_type, &args, dst, executable_pattern);
         format_string++;
       }
