@@ -262,6 +262,9 @@ pattern read_pattern(const char** format_string, pattern result) {
       if (*curr_ptr == '.' && result_of_search - curr_ptr > 1) {
         curr_ptr++;
         set_result = num_param_set(&curr_ptr, &(result.precision));
+      } else if (*curr_ptr == '.' && (result_of_search - curr_ptr == 1 || result_of_search - curr_ptr == 2))
+      {
+      	set_result = 1; result.precision = 0;
       }
       state = LENGTH_STATE;
     }
