@@ -90,7 +90,7 @@ void execute_pattern(int data_type, va_list* args, char* dst,
         print_hexadecimal((unsigned long int)pointer_arg, 0,
                           executable_pattern.width,
                           executable_pattern.pattern_flags.minus_sgn,
-                          executable_pattern.padding_char, 0, 1, 1, dst);
+                          executable_pattern.padding_char, 1, 0, 1, dst);
         break;
       case TYPE_INT:
         execute_int_pattern(args, dst, executable_pattern);

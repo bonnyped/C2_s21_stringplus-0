@@ -217,12 +217,9 @@ void print_hexadecimal(long unsigned int number, int precision, int width,
       print_char('0', tmp, 0, 0, pading_symbol);
     }
     int printed_len = s21_strlen(tmp);
-    int expected_len = sizeof(void*) * 2;
-    if (pointer && printed_len < expected_len) {
-      for (int i = expected_len - printed_len; i > 0; i--) {
-        print_char('0', tmp, 0, 0, pading_symbol);
-      }
-      printed_len = s21_strlen(tmp);
+    if (pointer && number == 0) {
+      print_string("(nil)", dst, 0, 0, 0, pading_symbol);
+      printed_len = s21_strlen("(nil)");
     }
     if (precision > 0 && precision > printed_len) {
       int difference = precision - printed_len;
