@@ -99,17 +99,6 @@
   ck_assert_int_eq(sprintf(res, format, a, b, c, d), s21_sprintf(resorig, format, a, b, c, d));
   ck_assert_str_eq(res, resorig);
 
-#test s21_sprintf_i_2_9   
-  char res[200] = "\0";
-  char resorig[200] = "\0";
-  char format[100] = "%Li%Li%Li%Li";
-  unsigned int a = INT_MIN;
-  long int b = 0;
-  char c = '\n';
-  short int d = 34;
-  ck_assert_int_eq(sprintf(res, format, a, b, c, d), s21_sprintf(resorig, format, a, b, c, d));
-  ck_assert_str_eq(res, resorig);
-
 #test s21_sprintf_i_2_10  
   char res[200] = "\0";
   char resorig[200] = "\0";

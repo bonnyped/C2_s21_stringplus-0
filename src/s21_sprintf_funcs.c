@@ -71,7 +71,6 @@ void print_int(void* number, int precision, int width, int right_padding,
   }
   if (array != s21_NULL) {
     int_to_chars(number, array_len, array, type);
-
     print_sign(plus_sgn, minus_sgn, space_symbol, number_sgn, dst);
     if (precision > 0 && precision > (int)array_len) {
       int difference = precision - (int)array_len;
@@ -310,12 +309,10 @@ void print_double(long double num, int precision, int width, int right_padding,
       whole_len = 1;
     }
     char* tmp = malloc(sizeof(char) * (precision + 3 + whole_len));
-    if (width > precision + whole_len + 1 +
-                    (plus_sgn || space_symbol || number_sgn == -1) &&
-        !right_padding) {
-      add_padding(width - (whole_len + 1 + precision +
-                           (plus_sgn || space_symbol || number_sgn == -1)),
-                  pading_symbol, dst);
+    int printed_len = precision + whole_len + (precision > 0 || point_forced)+
+                    (plus_sgn || space_symbol || number_sgn == -1);
+    if (width > printed_len && !right_padding) {
+      add_padding(width - printed_len, pading_symbol, dst);
     }
     if (tmp != s21_NULL) {
       tmp[0] = 0;
@@ -335,12 +332,8 @@ void print_double(long double num, int precision, int width, int right_padding,
       print_string(tmp, dst, -1, 0, 0, pading_symbol);
       free(tmp);
     }
-    if (width > precision + whole_len + 1 +
-                    (plus_sgn || space_symbol || number_sgn == -1) &&
-        right_padding) {
-      add_padding(width - (whole_len + 1 + precision +
-                           (plus_sgn || space_symbol || number_sgn == -1)),
-                  pading_symbol, dst);
+    if (width > printed_len && right_padding) {
+      add_padding(width - printed_len, pading_symbol, dst);
     }
   }
 }
@@ -371,18 +364,18 @@ void print_fractional_float(long double fractional, int precision, int plus_sgn,
                             char* dst) {
   for (int i = 0; i < precision; i++) {
     fractional = fractional * 10;
-    int digit = (int)(fractional);
+    long int digit = (int)(fractional);
     print_int(&digit, 1, 0, 0, ' ', plus_sgn, 0, 0, dst, TYPE_INT);
     fractional = fractional - (int)fractional;
   }
 }
 
 void print_whole_float(long double num, char* dst) {
-  int digit;
+  long int digit;
   for (int i = log10l(num); i >= 0; i--) {
-    double weight = powl(10.0, i);
+    long double weight = powl(10.0, i);
     if (weight > 0 && !isinf(weight)) {
-      digit = floor(num / weight);
+      digit = floorl(num / weight);
       num -= (digit * weight);
       print_int(&digit, 1, 0, 0, ' ', 0, 0, 0, dst, TYPE_INT);
     }
