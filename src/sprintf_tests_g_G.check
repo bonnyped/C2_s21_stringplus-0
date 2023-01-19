@@ -1,4 +1,4 @@
-#suite s21_sprintf_tests_g_G
+#suite s21_sprintf_tests_g_G_
 
 #test test_g_G_1
 double c = 0.0389849885794308485;
