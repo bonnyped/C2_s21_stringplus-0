@@ -305,7 +305,7 @@ int get_int_sign(void* number, int type) {
   int result = 1;
   if (type == TYPE_INT || type == TYPE_LONG_INT || type == TYPE_SHORT_INT) {
     int zero = 0;
-    if (*(int*)number < zero) {
+    if (*(long int*)number < zero) {
       result = -1;
     }
   }
