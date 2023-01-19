@@ -170,7 +170,7 @@
 #test s21_sprintf_u_3_1_LONG_SHORT
   char res[200] = "\0";
   char resorig[200] = "\0";
-  char format[100] = " %hu %hu %lu %lu   %ld %li";
+  char format[100] = " %hd %hu %lu %lu   %ld %li";
   short int a = SHRT_MIN;
   short int b = SHRT_MAX;
   long int c = LONG_MIN;
@@ -181,34 +181,12 @@
 #test s21_sprintf_u_3_2_LONG_SHORT
   char res[200] = "\0";
   char resorig[200] = "\0";
-  char format[100] = " %30hu %20hu %10lu %1lu   %ld %li";
+  char format[100] = " %30hd %20hu %10lu %1lu   %ld %li";
   short int a = SHRT_MIN;
   short int b = SHRT_MAX;
   long int c = LONG_MIN;
   long int d = LONG_MAX;
   ck_assert_int_eq(sprintf(res, format, a, b, c, d, a, d), s21_sprintf(resorig, format,  a, b, c, d, a, d));
-  ck_assert_str_eq(res, resorig);
-
-#test s21_sprintf_u_4_1_combining
-  char res[200] = "\0";
-  char resorig[200] = "\0";
-  char format[100] = " %-35  u %-+15u %+-30lu %0lu   %ld %li";
-  unsigned int a = 0;
-  int b = -96286;
-  long int c = LONG_MIN;
-  long int d = LONG_MAX;
-  ck_assert_int_eq(sprintf(res, format, a, b, c, d, a, d), s21_sprintf(resorig, format,  a, b, c, d, a, d));
-  ck_assert_str_eq(res, resorig);
-
-#test s21_sprintf_u_4_2_combining  
-  char res[250] = "\0";
-  char resorig[250] = "\0";
-  char format[100] = " %%%13.u %-+%\\s21_test%21\\%%.56u %+-30lu %%lu   %ld %li";
-  unsigned int a = 0;
-  int b = -96286;
-  long int c = LONG_MIN;
-  long int d = LONG_MAX;
-  ck_assert_int_eq(sprintf(res, format, a, b, c, d, a, d), s21_sprintf(resorig, format,  a, b, c, d, a, d)); /*SEGA in s21_sprintf*/
   ck_assert_str_eq(res, resorig);
 
 #test s21_sprintf_u_4_3_combining

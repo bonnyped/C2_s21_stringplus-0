@@ -60,11 +60,11 @@ void print_int(void* number, int precision, int width, int right_padding,
                int space_symbol, char* dst, int type) {
   s21_size_t array_len = number_length(number, type);
   char* array = s21_NULL;
+  int printing_len = precision > (int)array_len ? precision : (int)array_len;
   if (precision != 0 || (precision == 0 && !is_zero(number, type))) {
     array = malloc(sizeof(char) * array_len);
-  }
+  } else { printing_len = 0; }
   int number_sgn = get_int_sign(number, type);
-  int printing_len = precision > (int)array_len ? precision : (int)array_len;
   printing_len += (plus_sgn || space_symbol || (minus_sgn && number_sgn == -1));
   if (width > printing_len && !right_padding) {
     add_padding(width - (printing_len), pading_symbol, dst);
