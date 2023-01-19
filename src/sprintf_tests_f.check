@@ -1,4 +1,4 @@
-#suite sprintf_test_c
+#suite sprintf_test_f
 
 #test s21_sprintf_f_1
   char res[200];
