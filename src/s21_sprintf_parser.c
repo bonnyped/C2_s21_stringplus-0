@@ -277,7 +277,8 @@ pattern read_pattern(const char** format_string, pattern result) {
       result.pattern_is_ok = 0;
     }
   }
-  *format_string = curr_ptr;
+  //*format_string = curr_ptr;
+  *format_string = result_of_search;
   return result;
 }
 

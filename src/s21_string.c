@@ -93,7 +93,9 @@ int s21_sprintf(char* dst, const char* format_string, ...) {
         if (executable_pattern.precision == READ_REQUIRED) {
           executable_pattern.precision = va_arg(args, int);
         }
+        if(executable_pattern.pattern_is_ok) {
         execute_pattern(data_type, &args, dst, executable_pattern);
+        }
         format_string++;
       }
     }
