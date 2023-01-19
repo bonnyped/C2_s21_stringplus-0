@@ -1,5 +1,4 @@
 #suite s21_sprintf_tests_s
-#include <locale.h>
 
 #test test_s1
 char a[50] = "Hello";

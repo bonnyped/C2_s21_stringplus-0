@@ -1,5 +1,4 @@
 #suite s21_sprintf_tests_E
-#include <limits.h>
 
 #test test_E1
 double a = 777.0;
