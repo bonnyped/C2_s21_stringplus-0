@@ -3,9 +3,27 @@
 #test trim_test_1
   char work_string[BUFFSIZE] = "-*-qwer-*-";
   char work_string1[BUFFSIZE] = "-*";
-  ck_assert_str_eq("qwer", s21_trim(work_string, work_string1));
+  char *src = s21_trim(work_string, work_string1);
+  ck_assert_str_eq("qwer", src);
+  if (src) free(src);
 
 #test trim_test_2
-  char work_string[BUFFSIZE] = "-*-qwer-*-";
-  char work_string1[BUFFSIZE] = "";
-  ck_assert_str_eq("-*-qwer-*-", s21_trim(work_string, work_string1));
+  char work_string2[BUFFSIZE] = "-*-qwer-*-";
+  char work_string3[BUFFSIZE] = "u";
+  char *src2 = s21_trim(work_string2, work_string3);
+  ck_assert_str_eq("-*-qwer-*-", src2);
+  if (src2) free(src2);
+
+#test trim_test_3
+  char work_string4[BUFFSIZE] = "-*-qwer-*-";
+  char work_string5[BUFFSIZE] = "u";
+  char *src3 = s21_trim(work_string4, work_string5);
+  ck_assert_str_eq("-*-qwer-*-", src3);
+  if (src3) free(src3);
+
+#test trim_test_4
+  char work_string6[BUFFSIZE] = "q";
+  char work_string7[BUFFSIZE] = "q";
+  char *src4 = s21_trim(work_string6, work_string7);
+  ck_assert_str_eq("", src4);
+  if (src4) free(src4);
