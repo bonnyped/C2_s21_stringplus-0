@@ -30,13 +30,8 @@
 
 void print_char(char symb, char* dst, int width, int right_padding,
                 char pading_symbol);
-void print_long_char(wchar_t symb, char* input_dst, int width,
-                     int right_padding, wchar_t pading_symbol);
-void add_long_padding(int num, wchar_t pading_symbol, char* dst);
 void print_string(char* string, char* dst, int precision, int width,
                   int right_padding, char pading_symbol);
-void print_long_string(char* string, char* dst, int precision, int width,
-                       int right_padding, wchar_t pading_symbol);
 void add_padding(int num, char pading_symbol, char* dst);
 void print_int(void* number, int precision, int width, int right_padding,
                char pading_symbol, int plus_sgn, int minus_sgn,

@@ -25,31 +25,10 @@ void print_char(char symb, char* dst, int width, int right_padding,
     add_padding(width - 1, pading_symbol, dst);
   }
 }
-// NOT RDY YET
-void print_long_char(wchar_t symb, char* input_dst, int width,
-                     int right_padding, wchar_t pading_symbol) {
-  wchar_t* dst = (wchar_t*)input_dst;
-  wchar_t source[2];
-  source[0] = symb;
-  source[1] = 0;
-  while (*dst != 0) {
-    dst++;
-  }
-  if (width > 1 && !right_padding) {
-    add_long_padding(width - 1, pading_symbol, (char*)dst);
-  }
-  s21_memcpy(dst, source, sizeof(wchar_t) * 2);
-}
 
 void add_padding(int num, char pading_symbol, char* dst) {
   for (int i = 0; i < num; i++) {
     print_char(pading_symbol, dst, 1, 0, pading_symbol);
-  }
-}
-
-void add_long_padding(int num, wchar_t pading_symbol, char* dst) {
-  for (int i = 0; i < num; i++) {
-    print_long_char(pading_symbol, dst, 1, 0, pading_symbol);
   }
 }
 
@@ -71,40 +50,6 @@ void print_string(char* string, char* dst, int precision, int width,
   }
   if ((int)str_len < width && right_padding) {
     add_padding(width - str_len, pading_symbol, dst);
-  }
-}
-
-void print_long_string(char* string, char* dst, int precision, int width,
-                       int right_padding, wchar_t pading_symbol) {
-  wchar_t* wstring = (wchar_t*)string;
-  wchar_t* wdst = (wchar_t*)dst;
-  wchar_t end_of_str = '\0';
-  s21_size_t str_len;
-  if (precision == 0) {
-    int i = 0;
-    wchar_t* tmp = wstring;
-    for (int i = 0; *tmp != end_of_str; tmp++, i++) {
-    }
-    str_len = i;
-  } else {
-    str_len = precision;
-  }
-  if ((int)str_len < width && !right_padding) {
-    add_long_padding(width - str_len, pading_symbol, (char*)wdst);
-  }
-  if (precision == 0) {
-    for (int i = 0; *wstring != end_of_str; wstring++, i++) {
-      print_long_char(*wstring, (char*)wdst, width, right_padding,
-                      pading_symbol);
-    }
-  } else {
-    for (int i = 0; i < precision; wstring++, i++) {
-      print_long_char(*wstring, (char*)wdst, width, right_padding,
-                      pading_symbol);
-    }
-  }
-  if ((int)str_len < width && right_padding) {
-    add_long_padding(width - str_len, pading_symbol, (char*)wdst);
   }
 }
 
@@ -204,8 +149,11 @@ void print_hexadecimal(long unsigned int number, int precision, int width,
     tmp[0] = 0;
     if (prefix && number != 0) {
       print_char('0', tmp, 0, 0, pading_symbol);
-      if (in_upper_case) { print_char('X', tmp, 0, 0, pading_symbol); 
-      } else {print_char('x', tmp, 0, 0, pading_symbol);}
+      if (in_upper_case) {
+        print_char('X', tmp, 0, 0, pading_symbol);
+      } else {
+        print_char('x', tmp, 0, 0, pading_symbol);
+      }
     }
     if (number != 0) {
       for (long unsigned int num = number; num > 0; num = num / 16) {
@@ -213,12 +161,12 @@ void print_hexadecimal(long unsigned int number, int precision, int width,
         print_char(hex_char_from_num(digit, in_upper_case), tmp, 0, 0,
                    pading_symbol);
       }
-    } else {
+    } else if (!pointer) {
       print_char('0', tmp, 0, 0, pading_symbol);
     }
     int printed_len = s21_strlen(tmp);
     if (pointer && number == 0) {
-      print_string("(nil)", dst, 0, 0, 0, pading_symbol);
+      print_string("(nil)", tmp, 0, 0, 0, pading_symbol);
       printed_len = s21_strlen("(nil)");
     }
     if (precision > 0 && precision > printed_len) {
@@ -229,13 +177,13 @@ void print_hexadecimal(long unsigned int number, int precision, int width,
       printed_len = s21_strlen(tmp);
     }
     if (width > printed_len && !right_padding) {
-      if (pading_symbol == '0') { 
-      add_padding(width - (printed_len), pading_symbol, tmp); 
+      if (pading_symbol == '0') {
+        add_padding(width - (printed_len), pading_symbol, tmp);
       } else {
-      add_padding(width - (printed_len), pading_symbol, dst); 
+        add_padding(width - (printed_len), pading_symbol, dst);
       }
     }
-    if (precision != 0 || number != 0) {
+    if (precision != 0 || number != 0 || pointer) {
       if (number != 0) {
         reverse_string(tmp + prefix * 2);
       }

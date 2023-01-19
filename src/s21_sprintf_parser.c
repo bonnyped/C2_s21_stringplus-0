@@ -106,34 +106,19 @@ void execute_chars_pattern(int data_type, va_list* args, char* dst,
                            pattern executable_pattern) {
   char* str_arg;
   char char_arg;
-  wchar_t wchar_arg;
   switch (data_type) {
     case TYPE_STRING:
       str_arg = va_arg(*args, char*);
-      if (executable_pattern.length == 'n') {
-        print_string(str_arg, dst, executable_pattern.precision,
-                     executable_pattern.width,
-                     executable_pattern.pattern_flags.minus_sgn,
-                     executable_pattern.padding_char);
-      } else if (executable_pattern.length == 'l') {
-        print_long_string(str_arg, dst, executable_pattern.precision,
-                          executable_pattern.width,
-                          executable_pattern.pattern_flags.minus_sgn,
-                          (wchar_t)executable_pattern.padding_char);
-      }
-      break;
-    case TYPE_CHAR:
-      if (executable_pattern.length == 'n') {
-        char_arg = va_arg(*args, int);
-        print_char(char_arg, dst, executable_pattern.width,
+      print_string(str_arg, dst, executable_pattern.precision,
+                   executable_pattern.width,
                    executable_pattern.pattern_flags.minus_sgn,
                    executable_pattern.padding_char);
-      } else if (executable_pattern.length == 'l') {
-        wchar_arg = va_arg(*args, wchar_t);
-        print_long_char(wchar_arg, dst, executable_pattern.width,
-                        executable_pattern.pattern_flags.minus_sgn,
-                        (wchar_t)executable_pattern.padding_char);
-      }
+      break;
+    case TYPE_CHAR:
+      char_arg = va_arg(*args, int);
+      print_char(char_arg, dst, executable_pattern.width,
+                 executable_pattern.pattern_flags.minus_sgn,
+                 executable_pattern.padding_char);
       break;
   }
 }
@@ -262,9 +247,10 @@ pattern read_pattern(const char** format_string, pattern result) {
       if (*curr_ptr == '.' && result_of_search - curr_ptr > 1) {
         curr_ptr++;
         set_result = num_param_set(&curr_ptr, &(result.precision));
-      } else if (*curr_ptr == '.' && (result_of_search - curr_ptr == 1 || result_of_search - curr_ptr == 2))
-      {
-      	set_result = 1; result.precision = 0;
+      } else if (*curr_ptr == '.' && (result_of_search - curr_ptr == 1 ||
+                                      result_of_search - curr_ptr == 2)) {
+        set_result = 1;
+        result.precision = 0;
       }
       state = LENGTH_STATE;
     }
