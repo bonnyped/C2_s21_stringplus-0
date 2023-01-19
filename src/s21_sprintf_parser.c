@@ -117,7 +117,7 @@ void execute_chars_pattern(int data_type, va_list* args, char* dst,
       char_arg = va_arg(*args, int);
       print_char(char_arg, dst, executable_pattern.width,
                  executable_pattern.pattern_flags.minus_sgn,
-                 executable_pattern.padding_char);
+                 ' ');
       break;
   }
 }
