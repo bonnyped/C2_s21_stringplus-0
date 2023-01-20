@@ -242,18 +242,20 @@ pattern read_pattern(const char** format_string, pattern result) {
       set_result = num_param_set(&curr_ptr, &(result.width));
       state = PRECISION_STATE;
     }
-    if (state <= PRECISION_STATE && !set_result) {
-      if (*curr_ptr == '.' && result_of_search - curr_ptr > 1) {
+    if (state <= PRECISION_STATE && !set_result && *curr_ptr == '.' ) {
+    int shift = 1;
+      if ((result_of_search - curr_ptr > 1)) {
         curr_ptr++;
+        shift--;
         set_result = num_param_set(&curr_ptr, &(result.precision));
-      } else if (*curr_ptr == '.' && (result_of_search - curr_ptr == 1 ||
-                                      result_of_search - curr_ptr == 2)) {
-        set_result = 1;
-        result.precision = 0;
+      } 
+      if (!set_result) {
+        set_result = check_zero_precision(*(curr_ptr + shift), &(result.precision));
+        curr_ptr = curr_ptr - (1 - shift);
       }
       state = LENGTH_STATE;
     }
-    if (state == LENGTH_STATE) {
+    if (state <= LENGTH_STATE) {
       if (!set_result) {
         set_result = length_set(*curr_ptr, &result);
         state++;
@@ -265,7 +267,6 @@ pattern read_pattern(const char** format_string, pattern result) {
       result.pattern_is_ok = 0;
     }
   }
-  //*format_string = curr_ptr;
   *format_string = result_of_search;
   return result;
 }
@@ -289,6 +290,20 @@ int flag_set(char symbol, pattern* pattern_to_set) {
     result = 1;
   }
   return result;
+}
+
+int check_zero_precision(const char symb, int* precision){
+	char correct_next_symb[] = "ducsfeoxpgiEXGhlL";
+	int i = 0;
+	int found = 0;
+	while(correct_next_symb[i] && !found){
+		if(symb == correct_next_symb[i]){
+			found = 1;
+			*precision = 0;
+		}
+		i++;
+	}
+	return found;
 }
 
 int num_param_set(const char** str, int* param) {

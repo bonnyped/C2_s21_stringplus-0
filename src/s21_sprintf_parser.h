@@ -43,6 +43,7 @@ void execute_float_pattern(int data_type, va_list* args, char* dst,
                            pattern executable_pattern);
 pattern read_pattern(const char** format_string, pattern result);
 int flag_set(char symbol, pattern* pattern_to_set);
+int check_zero_precision(const char symb, int* precision);
 int num_param_set(const char** str, int* param);
 int length_set(char symbol, pattern* pattern_to_set);
 
