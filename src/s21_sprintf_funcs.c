@@ -461,29 +461,63 @@ void print_double_scientific(long double num, int precision, int width,
 }
 */
 
+
+//PROBLEM WITH ZERO NUMBER
 void print_double_shortest(long double num, int precision, int width,
                            int right_padding, char pading_symbol, int plus_sgn,
                            int space_symbol, int capital, int point_forced,
                            char* dst) {
-long double original_num = num;
-if (num < 0) {
-    num = -num;
+    if (!check_special_float_nums(num, dst)) {
+        long double original_num = num;
+        if (num < 0) {
+            num = -num;
+        }
+        long int power;
+        if (num == 0.f) { power = 0; }
+        else {
+            power = log10l(num);
+        }
+        if (power <= 0) {
+            power--;
+        }
+        char tmp[300];
+        tmp[0] = 0;
+        if (precision == 0) { precision = 1; }
+        if (power < precision && power >= -4) {
+            print_double(original_num, precision - 1 - power, 0, right_padding,
+                pading_symbol, plus_sgn, space_symbol, point_forced, tmp);
+            if (!point_forced) { delete_zeros(tmp); }
+        }
+        else {
+            print_double(original_num * powl(10, -power), precision - 1, 0, 0, pading_symbol, plus_sgn, space_symbol,
+                point_forced, tmp);
+            if (!point_forced) { delete_zeros(tmp); }
+
+            if (capital) {
+                print_char('E', tmp, 0, 0, pading_symbol);
+            }
+            else {
+                print_char('e', tmp, 0, 0, pading_symbol);
+            }
+            print_int(&power, 2, 0, 0, pading_symbol, 1, 1, 0, tmp, TYPE_INT);
+        }
+        int num_len = (int)s21_strlen(tmp);
+        if (width > num_len && !right_padding) {
+    add_padding(width - num_len, pading_symbol, dst);
   }
-  long int power;
-  if(num == 0.f) {power = 0;}
-  else {
-   power = log10l(num);}
-  if (power <= -4) {
-    power--;
+        print_string(tmp, dst, -1, 0, right_padding, pading_symbol);
+        if (width > num_len && right_padding) {
+    add_padding(width - num_len, pading_symbol, dst);
   }
-  if (precision == 0) {precision = 1;}
-  if (power < precision && power >= -4) {
-  print_double(original_num, precision - 1 - power, width, right_padding,
-                 pading_symbol, plus_sgn, space_symbol, point_forced, dst);
-  } else {
-  print_double_scientific(original_num, precision - 1, width, right_padding,
-                            pading_symbol, plus_sgn, space_symbol, capital,
-                            point_forced, dst);
-  }
+    }
+}
+
+void delete_zeros(char* str) {
+    int i = s21_strlen(str);
+   
+    while (str[--i] == '0') {
+        str[i] = 0;
+        i--;
+    }
 }
 
