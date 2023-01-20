@@ -2,7 +2,7 @@
 
 #include <math.h>
 #include <stdlib.h>
-
+#include <stdio.h>
 #include "s21_string.h"
 
 /*%% template
@@ -362,11 +362,13 @@ int check_special_float_nums(long double num, char* dst) {
 
 void print_fractional_float(long double fractional, int precision, int plus_sgn,
                             char* dst) {
+                            
   for (int i = 0; i < precision; i++) {
-    fractional = fractional * 10;
-    long int digit = (int)(fractional);
+    fractional = fractional * powl(10, 1);
+    long double whole;
+    fractional = modfl(fractional, &whole);
+    long int digit = (long int)(whole);
     print_int(&digit, 1, 0, 0, ' ', plus_sgn, 0, 0, dst, TYPE_INT);
-    fractional = fractional - (int)fractional;
   }
 }
 
@@ -400,14 +402,14 @@ void print_double_scientific(long double num, int precision, int width,
     add_padding(width - num_len, pading_symbol, dst);
   }
   print_sign(plus_sgn, 1, space_symbol, number_sgn, dst);
-  print_double(num / powl(10, power), precision, 0, 0, pading_symbol, 0, 0,
+  print_double(num * powl(10, -power), precision, 0, 0, pading_symbol, 0, 0,
                point_forced, dst);
   if (capital) {
     print_char('E', dst, 0, 0, pading_symbol);
   } else {
     print_char('e', dst, 0, 0, pading_symbol);
   }
-  print_int(&power, 3, 0, 0, pading_symbol, 1, 1, 0, dst, TYPE_INT);
+  print_int(&power, 2, 0, 0, pading_symbol, 1, 1, 0, dst, TYPE_INT);
   if (width > num_len && right_padding) {
     add_padding(width - num_len, pading_symbol, dst);
   }
