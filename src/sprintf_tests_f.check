@@ -139,7 +139,7 @@
 #test s21_sprintf_f_16
   char res[200];
   char resorig[200];
-  char format[150] = "%#Lf, %.0Lf %0Lf %0.*Lf %+35Lf";
+  char format[150] = "%#Lf, %.Lf %0Lf %0.*Lf %+35Lf";
   long double a = 234897562983476.29552345234523452345;
   int b = 1;
   ck_assert_int_eq(sprintf(res, format, a, a, a, b, a, a), s21_sprintf(resorig, format, a, a, a, b, a, a));
