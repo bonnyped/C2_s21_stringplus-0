@@ -59,6 +59,9 @@ pattern init_pattern(int data_type) {
     case TYPE_SHORTEST_DOUBLE:
       result.precision = 6;
       break;
+    case TYPE_SHORTEST_DOUBLE_CAPITAL:
+      result.precision = 6;
+      break;
   }
   return result;
 }

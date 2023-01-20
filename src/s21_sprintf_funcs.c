@@ -416,7 +416,7 @@ void print_double_scientific(long double num, int precision, int width,
 }
 
 // vezde LONG DOUBLE!!! PEW PEW
-void print_double_shortest(long double num, int precision, int width,
+/*void print_double_shortest(long double num, int precision, int width,
                            int right_padding, char pading_symbol, int plus_sgn,
                            int space_symbol, int capital, int point_forced,
                            char* dst) {
@@ -448,7 +448,7 @@ void print_double_shortest(long double num, int precision, int width,
   if (real_precision == 0) {
     num_len_normal--;
   }
-  int num_len_scientific = (precision) + 6;
+  int num_len_scientific = (precision) + 5;
 
   if (num_len_scientific > num_len_normal) {
     print_double(original_num, real_precision, width, right_padding,
@@ -459,3 +459,31 @@ void print_double_shortest(long double num, int precision, int width,
                             point_forced, dst);
   }
 }
+*/
+
+void print_double_shortest(long double num, int precision, int width,
+                           int right_padding, char pading_symbol, int plus_sgn,
+                           int space_symbol, int capital, int point_forced,
+                           char* dst) {
+long double original_num = num;
+if (num < 0) {
+    num = -num;
+  }
+  long int power;
+  if(num == 0.f) {power = 0;}
+  else {
+   power = log10l(num);}
+  if (power <= -4) {
+    power--;
+  }
+  if (precision == 0) {precision = 1;}
+  if (power < precision && power >= -4) {
+  print_double(original_num, precision - 1 - power, width, right_padding,
+                 pading_symbol, plus_sgn, space_symbol, point_forced, dst);
+  } else {
+  print_double_scientific(original_num, precision - 1, width, right_padding,
+                            pading_symbol, plus_sgn, space_symbol, capital,
+                            point_forced, dst);
+  }
+}
+
