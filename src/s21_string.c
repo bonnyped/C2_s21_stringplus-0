@@ -108,13 +108,12 @@ char* s21_strchr(const char* str, int c) {
   s21_size_t i = 0;
   int exit = 0;
 
-  while (str[i] != '\0' && !exit) {
+  do {
     if (str[i] == c) {
       exit = 1;
       res = (char*)(str + i);
     }
-    i++;
-  }
+  } while (str[i++] != '\0' && !exit);
 
   return exit ? res : NULL;
 }

@@ -7,7 +7,6 @@ all: clean s21_string.a test gcov_report
 
 test: test.o s21_string.a
 	$(CC) test.o s21_string.a -o test -L. $(TEST_FLAGS)
-	./test
 
 test.o: test.c
 	$(CC) $(CFLAGS) test.c -o test.o

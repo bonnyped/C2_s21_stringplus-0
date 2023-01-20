@@ -53,3 +53,8 @@
   const char T1[] = "\0HELLO, WORLD!";
   int c9 = 'H';
   ck_assert_pstr_eq(strchr(t1, c9), s21_strchr(T1, c9));
+
+#test strchr_test_10
+  char s[] = "Hello, world!";
+  int ch = '\0';
+  ck_assert_pstr_eq(strchr(s, ch), s21_strchr(s, ch));
