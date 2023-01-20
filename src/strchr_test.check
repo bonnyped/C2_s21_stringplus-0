@@ -58,3 +58,8 @@
   char s[] = "Hello, world!";
   int ch = '\0';
   ck_assert_pstr_eq(strchr(s, ch), s21_strchr(s, ch));
+
+#test strchr_test_11
+  char s2[] = "He\0llo, world!";
+  int ch2 = '\0';
+  ck_assert_pstr_eq(strchr(s2, ch2), s21_strchr(s2, ch2));
