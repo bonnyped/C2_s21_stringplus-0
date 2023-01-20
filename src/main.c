@@ -13,11 +13,19 @@ Flags: #, 0 РЕШЕТКА У %g - оставляет нули без решетки если все нули то не
 description: .* Length description: L add all to parser!!!
 */
 int main() {
-long double a = -777;
-char res[400];
-char resorig[400];
-s21_sprintf(res, "%- 2.0Le|", a);
- sprintf(resorig, "%- 2.0Le|", a);
+double a = 777.0;
+char res[300];
+char resorig[300];
+s21_sprintf(res, "%E", a);
+ sprintf(resorig, "%E", a);
+  printf("%s\n",res);
+  printf("%s\n",resorig);
+  
+  
+double b = 777.0;
+
+s21_sprintf(res, "%e", b);
+sprintf(resorig, "%e", b);
   printf("%s\n",res);
   printf("%s\n",resorig);
 }

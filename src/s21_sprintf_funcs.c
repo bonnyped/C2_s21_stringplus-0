@@ -362,8 +362,8 @@ int check_special_float_nums(long double num, char* dst) {
 
 void print_fractional_float(long double fractional, int precision, int plus_sgn,
                             char* dst) {
-                            
-  for (int i = 0; i < precision; i++) {
+  int i = 0;
+  for (; i < precision; i++) {
     fractional = fractional * powl(10, 1);
     long double whole;
     fractional = modfl(fractional, &whole);
