@@ -318,7 +318,7 @@ void print_double(long double num, int precision, int width, int right_padding,
       tmp[0] = 0;
       print_sign(plus_sgn, 1, space_symbol, number_sgn, tmp);
       if (whole_len > 1 || whole_part != 0) {
-        print_whole_float(whole_part + 0.5, tmp);
+        print_whole_float(precision == 0?roundl(num):whole_part, tmp);
       } else {
         print_char('0', tmp, 1, 0, pading_symbol);
       }
@@ -393,11 +393,11 @@ void print_double_scientific(long double num, int precision, int width,
     number_sgn = -1;
     num = -num;
   }
-  int power = log10l(num);
+  long int power = log10l(num);
   if (power < 0) {
     power--;
   }
-  int num_len = 7 + precision + (plus_sgn || space_symbol || number_sgn == -1);
+  int num_len = 5 + (precision > 0 || point_forced) + precision + (plus_sgn || space_symbol || number_sgn == -1);
   if (width > num_len && !right_padding) {
     add_padding(width - num_len, pading_symbol, dst);
   }
