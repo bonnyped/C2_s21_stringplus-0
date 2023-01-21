@@ -84,7 +84,7 @@ void print_int(void* number, int precision, int width, int right_padding,
     free(array);
   }
   if (width > printing_len && right_padding) {
-    add_padding(width - (printing_len), pading_symbol, dst);
+    add_padding(width - (printing_len), ' ', dst);
   }
 }
 
