@@ -81,7 +81,11 @@ int s21_sprintf(char* dst, const char* format_string, ...) {
     } else if (*(format_string + 1) == '%') {
       print_char('%', dst, 1, 0, ' ');
       format_string = format_string + 2;
-    } else {
+    } else if (*(format_string + 1) == 'n') {
+      int* pointer = (int*)va_arg(args, int*);
+      *pointer = (int)s21_strlen(dst);
+      format_string = format_string + 2;
+    }else {
       int data_type = get_format_type(format_string);
       if (data_type != NOT_VALID_RESULT) {
         format_string++;

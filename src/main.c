@@ -15,16 +15,15 @@ description: .* Length description: L add all to parser!!!
 int main() {
 char res[200];
   char resorig[200];
-  char format[100] = "%10f %15f %20.f";
-  float a = -1000./0.;
-  float b = 0.0 / 0.0;
-  float c = 100./0.;
-  sprintf(res, format, a, b, c);
-   s21_sprintf(resorig, format, a, b, c);
+  //char format[100] = "this is kek %n";
+  int a= 0;
+  int b = 0;
+  sprintf(res, "this is kek %n", &a);
+   s21_sprintf(resorig, "this is kek %5n", &b);
 
 
   printf("%s\n",res);
   printf("%s\n",resorig);
-  
-
+  printf("%d\n", a);
+printf("%d\n", b);
 }
