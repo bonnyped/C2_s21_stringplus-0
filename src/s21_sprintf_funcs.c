@@ -417,7 +417,7 @@ void print_double_scientific(long double num, int precision, int width,
     num = -num;
   }
   long int power = log10l(num);
-  if (power < 0) {
+  if (power <= 0) {
     power--;
   }
   int power_len = (int)number_length(&power, TYPE_LONG_INT);
