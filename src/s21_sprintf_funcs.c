@@ -542,7 +542,7 @@ void print_double_shortest(long double num, int precision, int width,
         print_string(tmp, dst, -1, 0, right_padding, pading_symbol);
         if(!right_padding && (plus_sgn || space_symbol || original_num <0 ) && padding_added){correct_padding(start_of_num);}
         if (width > num_len && right_padding) {
-    add_padding(width - num_len, pading_symbol, dst);
+    add_padding(width - num_len, ' ', dst);
   }
   free(tmp);
     }
