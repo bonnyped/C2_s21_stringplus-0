@@ -294,7 +294,7 @@ int is_zero(void* number, int type) {
 void print_double(long double num, int precision, int width, int right_padding,
                   char pading_symbol, int plus_sgn, int space_symbol,
                   int point_forced, char* dst) {
-  if (!check_special_float_nums(num, dst)) {  // WIDTH & PREC FOR NANS!!!
+  if (!check_special_float_nums(num, plus_sgn, space_symbol, dst)) {  // WIDTH & PREC FOR NANS!!!
     int number_sgn = 0;
     int whole_len;
     if (num < 0) {
@@ -338,11 +338,15 @@ void print_double(long double num, int precision, int width, int right_padding,
   }
 }
 
-int check_special_float_nums(long double num, char* dst) {
+int check_special_float_nums(long double num, int plus_sgn, int space_symbol, char* dst) {
   int result = 0;
   if (isnan(num)) {
     if (signbit(num) == 0) {
+      if(plus_sgn) {
       print_char('+', dst, 0, 0, ' ');
+      } else if(space_symbol) {
+      print_char(' ', dst, 0, 0, ' ');
+      }
     } else {
       print_char('-', dst, 0, 0, ' ');
     }
@@ -350,7 +354,11 @@ int check_special_float_nums(long double num, char* dst) {
     result = 1;
   } else if (isinf(num)) {
     if (signbit(num) == 0) {
+      if(plus_sgn) {
       print_char('+', dst, 0, 0, ' ');
+      } else if(space_symbol) {
+      print_char(' ', dst, 0, 0, ' ');
+      }
     } else {
       print_char('-', dst, 0, 0, ' ');
     }
@@ -469,7 +477,7 @@ void print_double_shortest(long double num, int precision, int width,
                            int right_padding, char pading_symbol, int plus_sgn,
                            int space_symbol, int capital, int point_forced,
                            char* dst) {
-    if (!check_special_float_nums(num, dst)) {
+    if (!check_special_float_nums(num, plus_sgn, space_symbol, dst)) {
     	char* start_of_num = &dst[s21_strlen(dst)];
         long double original_num = num;
         if (num < 0) {
