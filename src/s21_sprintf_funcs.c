@@ -294,7 +294,7 @@ int is_zero(void* number, int type) {
 void print_double(long double num, int precision, int width, int right_padding,
                   char pading_symbol, int plus_sgn, int space_symbol,
                   int point_forced, char* dst) {
-  if (!check_special_float_nums(num, plus_sgn, space_symbol, dst)) {  // WIDTH & PREC FOR NANS!!!
+  if (!check_special_float_nums(num,width,right_padding, pading_symbol, plus_sgn, space_symbol, dst)) {  // WIDTH & PREC FOR NANS!!!
     int number_sgn = 0;
     int whole_len;
     if (num < 0) {
@@ -338,8 +338,15 @@ void print_double(long double num, int precision, int width, int right_padding,
   }
 }
 
-int check_special_float_nums(long double num, int plus_sgn, int space_symbol, char* dst) {
+int check_special_float_nums(long double num, int width,
+                           int right_padding, char pading_symbol,int plus_sgn, int space_symbol, char* dst) {
   int result = 0;
+  int printed_len = 3  + (plus_sgn || space_symbol || signbit(num) != 0);
+  if (isnan(num) || isinf(num)){
+  if (width > printed_len && !right_padding) {
+      add_padding(width - printed_len, pading_symbol, dst);
+    }
+  }
   if (isnan(num)) {
     if (signbit(num) == 0) {
       if(plus_sgn) {
@@ -364,6 +371,11 @@ int check_special_float_nums(long double num, int plus_sgn, int space_symbol, ch
     }
     print_string("inf", dst, -1, 0, 0, ' ');
     result = 1;
+  }
+  if(result){
+  if (width > printed_len && right_padding) {
+      add_padding(width - printed_len, pading_symbol, dst);
+    }
   }
   return result;
 }
@@ -477,7 +489,7 @@ void print_double_shortest(long double num, int precision, int width,
                            int right_padding, char pading_symbol, int plus_sgn,
                            int space_symbol, int capital, int point_forced,
                            char* dst) {
-    if (!check_special_float_nums(num, plus_sgn, space_symbol, dst)) {
+    if (!check_special_float_nums(num,width,right_padding, pading_symbol, plus_sgn, space_symbol, dst)) {
     	char* start_of_num = &dst[s21_strlen(dst)];
         long double original_num = num;
         if (num < 0) {
