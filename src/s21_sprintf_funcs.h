@@ -67,4 +67,5 @@ void print_double_shortest(long double num, int precision, int width,
                            int space_symbol, int capital, int point_forced,
                            char* dst);
 void delete_zeros(char* str);
+void correct_padding(char* str);
 #endif

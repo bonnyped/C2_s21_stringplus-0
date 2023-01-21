@@ -480,7 +480,7 @@ void print_double_shortest(long double num, int precision, int width,
         if (power <= 0) {
             power--;
         }
-        char tmp[300];
+        char* tmp = malloc(sizeof(char) * (width + 300)) ;
         tmp[0] = 0;
         if (precision == 0) { precision = 1; }
         if (power < precision && power >= -4) {
@@ -506,9 +506,11 @@ void print_double_shortest(long double num, int precision, int width,
     add_padding(width - num_len, pading_symbol, dst);
   }
         print_string(tmp, dst, -1, 0, right_padding, pading_symbol);
+        if(!right_padding && (plus_sgn || space_symbol || original_num <0 )){correct_padding(dst);}
         if (width > num_len && right_padding) {
     add_padding(width - num_len, pading_symbol, dst);
   }
+  free(tmp);
     }
 }
 
@@ -519,5 +521,13 @@ void delete_zeros(char* str) {
         str[i] = 0;
         i--;
     }
+}
+
+
+void correct_padding(char* str){
+char* search_result = s21_strpbrk(str, " +-");
+char tmp = *str;
+*str = *search_result;
+*search_result = tmp;
 }
 
