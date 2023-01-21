@@ -325,7 +325,8 @@ void print_double(long double num, int precision, int width, int right_padding,
       if (precision > 0 || point_forced) {
         print_char('.', tmp, 1, 0, pading_symbol);
       }
-      if ((int)(fract_part * powl(10, precision + 1)) % 10 >= 5) {
+      int next_digigt = fmodl(fract_part * powl(10, precision + 1), 10);
+      if (next_digigt >= 5) {
         fract_part = fract_part + 0.5 * powl(10, -precision);
       } else {
       fract_part = fract_part + 0.1 * powl(10, -precision); // tmp fix for rounding issues -764231539. with .11 prec
