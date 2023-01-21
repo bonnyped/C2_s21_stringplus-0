@@ -2,7 +2,7 @@
 
 #include <math.h>
 #include <stdlib.h>
-
+#include <stdio.h>
 #include "s21_string.h"
 
 /*%% template
@@ -327,6 +327,8 @@ void print_double(long double num, int precision, int width, int right_padding,
       }
       if ((int)(fract_part * powl(10, precision + 1)) % 10 >= 5) {
         fract_part = fract_part + 0.5 * powl(10, -precision);
+      } else {
+      fract_part = fract_part + 0.1 * powl(10, -precision); // tmp fix for rounding issues -764231539. with .11 prec
       }
       print_fractional_float(fract_part, precision, 0, tmp);
       print_string(tmp, dst, -1, 0, 0, pading_symbol);
@@ -384,7 +386,7 @@ void print_fractional_float(long double fractional, int precision, int plus_sgn,
                             char* dst) {
   int i = 0;
   for (; i < precision; i++) {
-    fractional = fractional * powl(10, 1);
+    fractional = fractional * 10;
     long double whole;
     fractional = modfl(fractional, &whole);
     long int digit = (long int)(whole);
