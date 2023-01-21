@@ -416,10 +416,13 @@ void print_double_scientific(long double num, int precision, int width,
     number_sgn = -1;
     num = -num;
   }
-  long int power = log10l(num);
+  long int power;
+  if (num != 0.f) {
+  power = log10l(num);
   if (power <= 0) {
     power--;
   }
+  } else { power = 0;};
   int power_len = (int)number_length(&power, TYPE_LONG_INT);
   if (power_len < 2) {power_len = 2;}
   int num_len = 3 + power_len  + (precision > 0 || point_forced) + precision + (plus_sgn || space_symbol || number_sgn == -1);
