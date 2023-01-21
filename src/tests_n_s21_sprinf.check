@@ -14,11 +14,11 @@
 #test s_21_sprintf_n_for_2
   char res[100];
   char resorig[100];
-  char format[100] = "Hello %dHamlet%n To  be %ld or %ln";
+  char format[100] = "Hello %dHamlet%n To  be %ld or %n";
   int a = 0;
-  long b = 23;
+  int b = 23;
   int a2 = 0;
-  long b2 = 23;
+  int b2 = 23;
   ck_assert_int_eq(sprintf(res, format, a, &a,  b, &b), s21_sprintf(resorig, format, a2, &a2,  b2, &b2));
   ck_assert_str_eq(res, resorig);
   ck_assert_int_eq(a, a2);
@@ -27,11 +27,11 @@
 #test s_21_sprintf_n_for_3
   char res[100];
   char resorig[100];
-  char format[100] = "%n To  be %hd or %hn";
+  char format[100] = "%n To  be %hd or %n";
   int a = 0;
-  short b = 23;
+  int b = 23;
   int a2 = 0;
-  short b2 = 23;
+  int b2 = 23;
   ck_assert_int_eq(sprintf(res, format,  &a,  b, &b), s21_sprintf(resorig, format,  &a2,  b2, &b2));
   ck_assert_pstr_eq(res, resorig);
   ck_assert_int_eq(a, a2);
