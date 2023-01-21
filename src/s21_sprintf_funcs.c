@@ -420,7 +420,9 @@ void print_double_scientific(long double num, int precision, int width,
   if (power < 0) {
     power--;
   }
-  int num_len = 5 + (precision > 0 || point_forced) + precision + (plus_sgn || space_symbol || number_sgn == -1);
+  int power_len = (int)number_length(&power, TYPE_LONG_INT);
+  if (power_len < 2) {power_len = 2;}
+  int num_len = 3 + power_len  + (precision > 0 || point_forced) + precision + (plus_sgn || space_symbol || number_sgn == -1);
   if (width > num_len && !right_padding) {
     add_padding(width - num_len, pading_symbol, dst);
   }
