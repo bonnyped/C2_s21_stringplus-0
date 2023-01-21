@@ -389,6 +389,7 @@ void print_double_scientific(long double num, int precision, int width,
                              int plus_sgn, int space_symbol, int capital,
                              int point_forced, char* dst) {
   int number_sgn = 0;
+  char* start_of_num = &dst[s21_strlen(dst)];
   if (num < 0) {
     number_sgn = -1;
     num = -num;
@@ -404,6 +405,7 @@ void print_double_scientific(long double num, int precision, int width,
   print_sign(plus_sgn, 1, space_symbol, number_sgn, dst);
   print_double(num * powl(10, -power), precision, 0, 0, pading_symbol, 0, 0,
                point_forced, dst);
+  if(!right_padding && (plus_sgn || space_symbol || number_sgn == -1)){correct_padding(start_of_num);}
   if (capital) {
     print_char('E', dst, 0, 0, pading_symbol);
   } else {
@@ -478,7 +480,7 @@ void print_double_shortest(long double num, int precision, int width,
         else {
             power = log10l(num);
         }
-        if (power <= 0) {
+        if (power < 0) {
             power--;
         }
         char* tmp = malloc(sizeof(char) * (width + 300)) ;
@@ -487,7 +489,8 @@ void print_double_shortest(long double num, int precision, int width,
         if (power < precision && power >= -4) {
             print_double(original_num, precision - 1 - power, 0, right_padding,
                 pading_symbol, plus_sgn, space_symbol, point_forced, tmp);
-            if (!point_forced) { delete_zeros(tmp); }
+            if (!point_forced && precision - 1 - power > 0) { delete_zeros(tmp); }
+            //if (num == 0.f) {delete_zeros(tmp, point_forced);}
         }
         else {
             print_double(original_num * powl(10, -power), precision - 1, 0, 0, pading_symbol, plus_sgn, space_symbol,
@@ -522,7 +525,10 @@ void delete_zeros(char* str) {
    
     while (str[--i] == '0') {
         str[i] = 0;
-        i--;
+        //i--;
+    }
+    if (str[i] == '.') {
+    	str[i] = 0;
     }
 }
 
