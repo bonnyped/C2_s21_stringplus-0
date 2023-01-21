@@ -14,11 +14,11 @@ description: .* Length description: L add all to parser!!!
 */
 int main() {
 double a = 1344527.434;
-double c = 0.00000389849885794308485;
+double c = 0.0389849885794308485;
 char res[300];
 char resorig[300];
-s21_sprintf(res, "%+16g |%+*G|\n", a, 20, c); 
-sprintf(resorig, "%+16g |%+*G|\n", a, 20, c);
+s21_sprintf(res, "%#+16g %#+0*G\n", a, 20, c);
+ sprintf(resorig, "%#+16g %#+0*G\n", a, 20, c);
   printf("%s\n",res);
   printf("%s\n",resorig);
   

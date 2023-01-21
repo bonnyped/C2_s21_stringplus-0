@@ -468,6 +468,7 @@ void print_double_shortest(long double num, int precision, int width,
                            int space_symbol, int capital, int point_forced,
                            char* dst) {
     if (!check_special_float_nums(num, dst)) {
+    	char* start_of_num = &dst[s21_strlen(dst)];
         long double original_num = num;
         if (num < 0) {
             num = -num;
@@ -502,11 +503,13 @@ void print_double_shortest(long double num, int precision, int width,
             print_int(&power, 2, 0, 0, pading_symbol, 1, 1, 0, tmp, TYPE_INT);
         }
         int num_len = (int)s21_strlen(tmp);
+        int padding_added = 0;
         if (width > num_len && !right_padding) {
+        padding_added = 1;
     add_padding(width - num_len, pading_symbol, dst);
   }
         print_string(tmp, dst, -1, 0, right_padding, pading_symbol);
-        if(!right_padding && (plus_sgn || space_symbol || original_num <0 )){correct_padding(dst);}
+        if(!right_padding && (plus_sgn || space_symbol || original_num <0 ) && padding_added){correct_padding(start_of_num);}
         if (width > num_len && right_padding) {
     add_padding(width - num_len, pading_symbol, dst);
   }
