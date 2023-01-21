@@ -407,6 +407,23 @@ void print_whole_float(long double num, char* dst) {
   }
 }
 
+long double round_double(long double num, int* power, int precision) {
+    int tmpq = fmodl(num * powl(10, -precision), 10);
+    if (tmpq >= 5) {
+
+        num = num + 0.5 * powl(10, (*power) - precision);
+        if (num != 0.f) {
+            *power = log10l(num);
+            if (*power <= 0) {
+                (*power)--;
+            }
+        }
+        else { *power = 0; };
+    }
+    return num;
+}
+
+
 void print_double_scientific(long double num, int precision, int width,
                              int right_padding, char pading_symbol,
                              int plus_sgn, int space_symbol, int capital,
@@ -419,6 +436,9 @@ if (!check_special_float_nums(num,width,right_padding, pading_symbol, plus_sgn, 
     num = -num;
   }
   long int power = get_power(num);
+  if(power<precision){
+  num = round_double(num, (int*)&power, precision);
+  }
   int power_len = (int)number_length(&power, TYPE_LONG_INT);
   if (power_len < 2) {power_len = 2;}
   int num_len = 3 + power_len  + (precision > 0 || point_forced) + precision + (plus_sgn || space_symbol || number_sgn == -1);
@@ -514,6 +534,7 @@ void print_double_shortest(long double num, int precision, int width,
         char* tmp = malloc(sizeof(char) * (width + 300)) ;
         tmp[0] = 0;
         if (precision == 0) { precision = 1; }
+            original_num = round_double(original_num, (int*)&power, precision);
         if (power < precision && power >= -4) {
             print_double(original_num, precision - 1 - power, 0, right_padding,
                 pading_symbol, plus_sgn, space_symbol, point_forced, tmp);
