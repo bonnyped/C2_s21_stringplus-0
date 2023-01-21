@@ -58,6 +58,7 @@ void print_double_scientific(long double num, int precision, int width,
                              int right_padding, char pading_symbol,
                              int plus_sgn, int space_symbol, int capital,
                              int point_forced, char* dst);
+                             long int get_power(long double num);
 void print_whole_float(long double num, char* dst);
 void print_fractional_float(long double fractional, int precision, int plus_sgn,
                             char* dst);

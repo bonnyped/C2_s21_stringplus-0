@@ -417,13 +417,7 @@ void print_double_scientific(long double num, int precision, int width,
     number_sgn = -1;
     num = -num;
   }
-  long int power;
-  if (num != 0.f) {
-  power = log10l(num);
-  if (power <= 0) {
-    power--;
-  }
-  } else { power = 0;};
+  long int power = get_power(num);
   int power_len = (int)number_length(&power, TYPE_LONG_INT);
   if (power_len < 2) {power_len = 2;}
   int num_len = 3 + power_len  + (precision > 0 || point_forced) + precision + (plus_sgn || space_symbol || number_sgn == -1);
@@ -445,6 +439,18 @@ void print_double_scientific(long double num, int precision, int width,
   }
 }
 
+
+long int get_power(long double num){
+long int result;
+  if (num == 0.f) { result = 0; }
+        else {
+            result = log10l(num);
+            if (result <= 0) {
+            result--;
+        }  
+        }
+   return result;
+}
 // vezde LONG DOUBLE!!! PEW PEW
 /*void print_double_shortest(long double num, int precision, int width,
                            int right_padding, char pading_symbol, int plus_sgn,
@@ -503,14 +509,7 @@ void print_double_shortest(long double num, int precision, int width,
         if (num < 0) {
             num = -num;
         }
-        long int power;
-        if (num == 0.f) { power = 0; }
-        else {
-            power = log10l(num);
-        }
-        if (power < 0) {
-            power--;
-        }
+        long int power = get_power(num);
         char* tmp = malloc(sizeof(char) * (width + 300)) ;
         tmp[0] = 0;
         if (precision == 0) { precision = 1; }
