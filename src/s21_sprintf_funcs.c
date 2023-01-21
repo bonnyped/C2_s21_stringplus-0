@@ -294,7 +294,7 @@ int is_zero(void* number, int type) {
 void print_double(long double num, int precision, int width, int right_padding,
                   char pading_symbol, int plus_sgn, int space_symbol,
                   int point_forced, char* dst) {
-  if (!check_special_float_nums(num,width,right_padding, pading_symbol, plus_sgn, space_symbol, dst)) {  // WIDTH & PREC FOR NANS!!!
+  if (!check_special_float_nums(num,width,right_padding, pading_symbol, plus_sgn, space_symbol, dst)) {
     int number_sgn = 0;
     int whole_len;
     if (num < 0) {
@@ -328,8 +328,8 @@ void print_double(long double num, int precision, int width, int right_padding,
       int next_digigt = fmodl(fract_part * powl(10, precision + 1), 10);
       if (next_digigt >= 5) {
         fract_part = fract_part + 0.5 * powl(10, -precision);
-      } else {
-      fract_part = fract_part + 0.1 * powl(10, -precision); // tmp fix for rounding issues -764231539. with .11 prec
+      //} else {
+      //fract_part = fract_part + 0.1 * powl(10, -precision); // tmp fix for rounding issues -764231539. with .11 prec
       }
       print_fractional_float(fract_part, precision, 0, tmp);
       print_string(tmp, dst, -1, 0, 0, pading_symbol);
@@ -411,6 +411,7 @@ void print_double_scientific(long double num, int precision, int width,
                              int right_padding, char pading_symbol,
                              int plus_sgn, int space_symbol, int capital,
                              int point_forced, char* dst) {
+if (!check_special_float_nums(num,width,right_padding, pading_symbol, plus_sgn, space_symbol, dst)) {
   int number_sgn = 0;
   char* start_of_num = &dst[s21_strlen(dst)];
   if (num < 0) {
@@ -438,7 +439,7 @@ void print_double_scientific(long double num, int precision, int width,
     add_padding(width - num_len, pading_symbol, dst);
   }
 }
-
+}
 
 long int get_power(long double num){
 long int result;
