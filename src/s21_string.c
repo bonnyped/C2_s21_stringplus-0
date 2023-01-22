@@ -282,10 +282,17 @@ s21_size_t s21_strspn(const char *str, const char *accept){
 char *s21_strstr(const char* str1, const char *str2){
     char *pointer = s21_NULL;
     char *tmp = s21_NULL;
+    if(str1 && str2){
     s21_size_t length_str1 = s21_strlen(str1);
     s21_size_t length_str2 = s21_strlen(str2);
     s21_size_t capacity = 0;
+    s21_size_t start_to_search = 0;
+    if(length_str2 > 0){
     for(s21_size_t i = 0; i < length_str1; i++){
+        if(start_to_search != 0) {
+            i = start_to_search;
+            start_to_search = 0;
+        }
         for(s21_size_t j = 0; j < length_str2; j++){
             if(!tmp) { 
                 if(str1[i + j] == str2[j]){
@@ -301,81 +308,85 @@ char *s21_strstr(const char* str1, const char *str2){
             if((tmp && j != 0 && length_str2 > 1) || (tmp && length_str2 == 1)){
             if(str1[i + j] == str2[j]){
                 capacity++;
+                if(start_to_search == 0 && str1[i + j] == str2[0]){
+                    start_to_search = i + j;
+                }
             }
-            if(j != length_str2 - 1 && str1[i + j] != str2[j]){
+            if(j <= length_str2 - 1  && str1[i + j] != str2[j] && length_str2 > 1){
                 tmp = s21_NULL;
                 i = i + j;
                 j = length_str2;
+                capacity = 0;
             }
-            if((capacity == length_str2 - 1 && length_str2 > 1) || (tmp && length_str2 == 1)){
+            if((capacity == length_str2 && length_str2 > 1) || (tmp && length_str2 == 1)){
                 pointer = tmp;
-            }
-            }
-        }
-    }
-    return pointer;
-}
-
-char *s21_strtok(char* str1, const char* str2){
-    char *pointer = str1;
-    static char *static_pointer;
-    s21_size_t length_str1;
-    s21_size_t length_str2 = s21_strlen(str2);
-    if(pointer) {
-        length_str1 = s21_strlen(pointer);
-     } else {
-        if(static_pointer){
-        pointer = static_pointer;
-        length_str1 = s21_strlen(pointer);
-        }
-     }
-     if(pointer){
-    for(s21_size_t i = 0; i < length_str1; i++){
-        for(s21_size_t j = 0; j < length_str2; j++){
-            if(pointer[i] == str2[j] && i != 0){
-                pointer[i] = '\0';
-                static_pointer = &pointer[i + 1];
                 i = length_str1;
-                j = length_str2;
-            } else if(pointer[i] == str2[j] && i == 0){
-                pointer = &pointer[i + 1];
-                i--;
-                if(*pointer == '\0'){
-                    pointer = s21_NULL;
-                    i = length_str1;
-                    j =length_str2;
+            }
+            } else if (!tmp){
+                if(str1[i + j] == str2[j]) {
+                    pointer = tmp;
                 }
             }
         }
-        if(i == length_str1 - 1){
-            static_pointer = s21_NULL;
-        } 
     }
-     }
+    } else{
+        pointer = (char*)str1;
+    }
+    }
     return pointer;
 }
 
-void *s21_to_upper(const char *str) {
-  char *src = s21_NULL;
-  if (str) {
-    s21_size_t capacity = s21_strlen(str);
-    src = calloc(capacity + 1, sizeof(char));
-
-    if (src) {
-      for (s21_size_t i = 0; i < capacity; i++) {
-        if (str[i] >= 97 && str[i] <= 122) {
-          src[i] = str[i] - 32;
-          } else {
-            src[i] = str[i];
-          }
-          if (i == capacity - 1) {
-              src[i + 1] = '\0';
-          }
+char *s21_strtok(char *str, const char *delim){
+    char *pointer = s21_NULL;
+    static char *static_pointer = s21_NULL;
+    size_t length_match = 0;
+    str ? static_pointer = s21_NULL : static_pointer;
+    static_pointer ? str = static_pointer : str;
+    if(str && delim && (*str != '\0' || *delim != '\0')){
+      char *match = s21_NULL;
+      match = s21_strpbrk(str, delim);
+      if(match == str){
+        length_match = s21_strspn(str, delim);
+          str = match + length_match;
+          match = s21_strpbrk(str, delim);
+          if(match) {
+            static_pointer = match + 1;
+            *match = '\0';
+            pointer = str;
+            } else {
+              *str == '\0' ? pointer = s21_NULL : (pointer = str);
+              } 
+      } else if(*str == '\0' || *delim == '\0') {
+        *str == '\0' ? pointer = s21_NULL : (pointer = str);
+      } else {
+        static_pointer = match + 1;
+        if(match) *match = '\0';
+        else static_pointer = match;
+        pointer = str;
       }
     }
-  }
+  return pointer;
+}
 
-  return src;
+void *s21_to_upper(const char *str){
+    char *src = s21_NULL;
+    if(str){
+        s21_size_t capacity = s21_strlen(str);
+        src = calloc(capacity + 1, sizeof(char));
+        if(src){
+        for(s21_size_t i = 0; i < capacity; i++){
+            if(str[i] >= 97 && str[i] <= 122){
+                src[i] = str[i] - 32;
+            } else {
+                src[i] = str[i];
+            }
+            if(i == capacity - 1){
+                src[i + 1] = '\0';
+            }
+        }
+    }
+    }
+    return src;
 }
 
 void *s21_to_lower(const char *str){
@@ -399,7 +410,7 @@ void *s21_to_lower(const char *str){
     return src;
 }
 
-void *s21_insert(const char *src, const char *str, s21_size_t start_index){
+void *s21_insert(const char *src, const char *str, s21_size_t start_index_trimed_buffer){
     char *srcstr = s21_NULL;
     if(src && str){
         s21_size_t length_src, length_str;
@@ -407,17 +418,17 @@ void *s21_insert(const char *src, const char *str, s21_size_t start_index){
         s21_size_t start_index_for_strsrc = 0;
         length_src = s21_strlen(src);
         length_str = s21_strlen(str);
-        if(start_index <= length_src){
+        if(start_index_trimed_buffer <= length_src){
         srcstr = calloc(length_src + length_str + 1, sizeof(char));
         if(length_str > 0){
         if(srcstr){
             for(s21_size_t i = 0; i < length_src + length_str; i++){
-                if(i == start_index){
+                if(i == start_index_trimed_buffer){
                     for(s21_size_t j = 0; j < length_str; j++){
-                        srcstr[start_index + j] = str[j];
+                        srcstr[start_index_trimed_buffer + j] = str[j];
                         count++;
                     }
-                    start_index_for_strsrc = start_index + count;
+                    start_index_for_strsrc = start_index_trimed_buffer + count;
                 } else {
                 count > 0 ? (srcstr[start_index_for_strsrc] = src[i - 1]) : (srcstr[start_index_for_strsrc] = src[i]);
                 start_index_for_strsrc++;
@@ -460,8 +471,21 @@ void *s21_trim(const char *src, const char *trim_chars){
             }
         str = trimed_buffer;
     } else {
-        str = (char*)src;
-    }
+        s21_size_t length_src = s21_strlen(src);
+        char *trimed_buffer = calloc(length_src + 1, sizeof(char));
+        for(size_t i = 0; i < length_src; i++){
+            trimed_buffer[i] = src[i];
         }
+        str = trimed_buffer;
+    }
+        } if(src && !trim_chars){ 
+        s21_size_t length_src = s21_strlen(src);
+        char *trimed_buffer = calloc(length_src + 1, sizeof(char));
+        for(size_t i = 0; i < length_src; i++){
+            trimed_buffer[i] = src[i];
+        }
+        str = trimed_buffer;
+        }
+
     return str;
 }
