@@ -395,16 +395,16 @@ int check_special_float_nums(long double num, int width, int right_padding,
   int result = 0;
   int sign = signbit(num);
   int printed_len = 3 + (plus_sgn || space_symbol || sign != 0);
-  if (isnan((float)num) || isinf((float)num)) {
+  if (isnan(num) || isinf(num)) {
     if (width > printed_len && !right_padding) {
       add_padding(width - printed_len, pading_symbol, dst);
     }
   }
-  if (isnan((float)num)!=0) {
+  if (isnan(num)!=0) {
     print_inf_nan_sgn(sign, plus_sgn, space_symbol, dst);
     print_string("nan", dst, -1, 0, 0, ' ');
     result = 1;
-  } else if (isinf((float)num)) {
+  } else if (isinf(num)) {
     print_inf_nan_sgn(sign, plus_sgn, space_symbol, dst);
     print_string("inf", dst, -1, 0, 0, ' ');
     result = 1;
