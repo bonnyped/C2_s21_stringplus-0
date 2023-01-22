@@ -207,12 +207,12 @@ s21_size_t s21_strcspn(const char *str1, const char *str2) {
 
 char *s21_strerror(int errnum) {
   char *str_error = NULL;
-  static char buffer_error[4500];
+  static char buffer_error[3000];
+  static char *array_error[] = s21_error;
   if (errnum < 0 || errnum > ARRAY_SIZE) {
     sprintf(buffer_error, "%s%d", UNKNOWN_ERROR, errnum); // s21_sprintf
     str_error = buffer_error;
   } else {
-    char *array_error[] = s21_error;
     str_error = (char *)array_error[errnum];
   }
   return str_error;
