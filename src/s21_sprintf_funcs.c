@@ -55,7 +55,14 @@ void print_int(void* number, int precision, int width, int right_padding,
   if (precision != 0 || (precision == 0 && !is_zero(number, type))) {
     array = malloc(sizeof(char) * array_len);
   } else {
-    printing_len = 0;
+    printing_len = (plus_sgn || space_symbol);
+    if (pading_symbol == '0') {
+    print_sign(plus_sgn, 0, space_symbol, 0, dst);
+    }
+    if (pading_symbol == ' ') {
+      print_sign(plus_sgn, 0, space_symbol, 0, dst);
+    }
+  
   }
   int number_sgn = get_int_sign(number, type);
   printing_len += (plus_sgn || space_symbol || (minus_sgn && number_sgn == -1));
