@@ -95,14 +95,7 @@ void print_octal(long unsigned int number, int precision, int width,
     if (prefix && number != 0) {
       print_char('0', tmp, 0, 0, pading_symbol);
     }
-    if (number != 0) {
-      for (long unsigned int num = number; num > 0; num = num / 8) {
-        int digit = num % 8;
-        print_char(digit + '0', tmp, 0, 0, pading_symbol);
-      }
-    } else {
-      print_char('0', tmp, 0, 0, pading_symbol);
-    }
+    print_hexa_oct_num_part(number, 8, 0, 0, pading_symbol, tmp);
     int printed_len = s21_strlen(tmp);
     if (precision > 0 && precision > printed_len) {
       int difference = precision - printed_len;
@@ -137,6 +130,18 @@ void reverse_string(char* str) {
   }
 }
 
+void print_hexa_oct_num_part(long unsigned int number, int base, int in_upper_case, int pointer, char pading_symbol, char* dst) { 
+if (number != 0) {
+      for (long unsigned int num = number; num > 0; num = num / base) {
+        int digit = num % base;
+        print_char(hex_char_from_num(digit, in_upper_case), dst, 0, 0,
+                   pading_symbol);
+      }
+    } else if (!pointer) {
+      print_char('0', dst, 0, 0, pading_symbol);
+    }
+}
+
 void print_hexadecimal(long unsigned int number, int precision, int width,
                        int right_padding, char pading_symbol, int prefix,
                        int in_upper_case, int pointer, char* dst) {
@@ -152,15 +157,7 @@ void print_hexadecimal(long unsigned int number, int precision, int width,
         print_char('x', tmp, 0, 0, pading_symbol);
       }
     }
-    if (number != 0) {
-      for (long unsigned int num = number; num > 0; num = num / 16) {
-        int digit = num % 16;
-        print_char(hex_char_from_num(digit, in_upper_case), tmp, 0, 0,
-                   pading_symbol);
-      }
-    } else if (!pointer) {
-      print_char('0', tmp, 0, 0, pading_symbol);
-    }
+    print_hexa_oct_num_part(number, 16, in_upper_case, pointer, pading_symbol, tmp);
     int printed_len = s21_strlen(tmp);
     if (pointer && number == 0) {
       print_string("(nil)", tmp, -1, 0, 0, pading_symbol);

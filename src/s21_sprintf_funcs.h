@@ -43,6 +43,7 @@ void print_hexadecimal(long unsigned int number, int precision, int width,
                        int right_padding, char pading_symbol, int prefix,
                        int in_upper_case, int pointer, char* dst);
 char hex_char_from_num(int num, int capital);
+void print_hexa_oct_num_part(long unsigned int number, int base, int in_upper_case, int pointer, char pading_symbol, char* dst);
 // void print_pointer(unsigned int pointer ,int width, int right_padding, char*
 // dst);
 void int_to_chars(void* input, int number_length, char* array, int type);
