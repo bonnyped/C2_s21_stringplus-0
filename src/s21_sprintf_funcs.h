@@ -65,6 +65,7 @@ void print_fractional_float(long double fractional, int precision, int plus_sgn,
 int check_special_float_nums(long double num, int width, int right_padding,
                              char pading_symbol, int plus_sgn, int space_symbol,
                              char* dst);
+void print_inf_nan_sgn(int sgn, int plus_sgn, int space_symbol, char* dst);
 void print_double_shortest(long double num, int precision, int width,
                            int right_padding, char pading_symbol, int plus_sgn,
                            int space_symbol, int capital, int point_forced,

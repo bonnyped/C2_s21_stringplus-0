@@ -341,34 +341,19 @@ int check_special_float_nums(long double num, int width, int right_padding,
                              char pading_symbol, int plus_sgn, int space_symbol,
                              char* dst) {
   int result = 0;
-  int printed_len = 3 + (plus_sgn || space_symbol || signbit(num) != 0);
+  int sign = signbit(num);
+  int printed_len = 3 + (plus_sgn || space_symbol || sign != 0);
   if (isnan(num) || isinf(num)) {
     if (width > printed_len && !right_padding) {
       add_padding(width - printed_len, pading_symbol, dst);
     }
   }
   if (isnan(num)) {
-    if (signbit(num) == 0) {
-      if (plus_sgn) {
-        print_char('+', dst, 0, 0, ' ');
-      } else if (space_symbol) {
-        print_char(' ', dst, 0, 0, ' ');
-      }
-    } else {
-      print_char('-', dst, 0, 0, ' ');
-    }
+    print_inf_nan_sgn(sign, plus_sgn, space_symbol, dst);
     print_string("nan", dst, -1, 0, 0, ' ');
     result = 1;
   } else if (isinf(num)) {
-    if (signbit(num) == 0) {
-      if (plus_sgn) {
-        print_char('+', dst, 0, 0, ' ');
-      } else if (space_symbol) {
-        print_char(' ', dst, 0, 0, ' ');
-      }
-    } else {
-      print_char('-', dst, 0, 0, ' ');
-    }
+    print_inf_nan_sgn(sign, plus_sgn, space_symbol, dst);
     print_string("inf", dst, -1, 0, 0, ' ');
     result = 1;
   }
@@ -378,6 +363,18 @@ int check_special_float_nums(long double num, int width, int right_padding,
     }
   }
   return result;
+}
+
+void print_inf_nan_sgn(int sgn, int plus_sgn, int space_symbol, char* dst) {
+  if (sgn == 0) {
+    if (plus_sgn) {
+      print_char('+', dst, 0, 0, ' ');
+    } else if (space_symbol) {
+      print_char(' ', dst, 0, 0, ' ');
+    }
+  } else {
+    print_char('-', dst, 0, 0, ' ');
+  }
 }
 
 void print_fractional_float(long double fractional, int precision, int plus_sgn,
@@ -405,17 +402,10 @@ void print_whole_float(long double num, char* dst) {
 }
 
 long double round_double(long double num, int* power, int precision) {
-  int tmpq = fmodl(num * powl(10, -precision), 10);
-  if (tmpq >= 5) {
+  int next_digit = fmodl(num * powl(10, -precision), 10);
+  if (next_digit >= 5) {
     num = num + 0.5 * powl(10, (*power) - precision);
-    if (num != 0.f) {
-      *power = log10l(num);
-      if (*power <= 0) {
-        (*power)--;
-      }
-    } else {
-      *power = 0;
-    };
+    *power = get_power(num);
   }
   return num;
 }
