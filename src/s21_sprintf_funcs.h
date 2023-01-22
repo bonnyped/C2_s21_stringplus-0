@@ -40,11 +40,15 @@ void print_octal(long unsigned int number, int precision, int width,
                  int right_padding, char pading_symbol, int prefix, char* dst);
 void reverse_string(char* str);
 void print_hexadecimal(long unsigned int number, int precision, int width,
-                       int right_padding, char pading_symbol,int plus, int space, int prefix,
-                       int in_upper_case, int pointer, char* dst);
-void print_prefix(char symbol_up, char symbol, int in_upper_case, int print_zero, char* dst );
+                       int right_padding, char pading_symbol, int plus,
+                       int space, int prefix, int in_upper_case, int pointer,
+                       char* dst);
+void print_prefix(char symbol_up, char symbol, int in_upper_case,
+                  int print_zero, char* dst);
 char hex_char_from_num(int num, int capital);
-void print_hexa_oct_num_part(long unsigned int number, int base, int in_upper_case, int pointer, char pading_symbol, char* dst);
+void print_hexa_oct_num_part(long unsigned int number, int base,
+                             int in_upper_case, int pointer, char pading_symbol,
+                             char* dst);
 // void print_pointer(unsigned int pointer ,int width, int right_padding, char*
 // dst);
 void int_to_chars(void* input, int number_length, char* array, int type);
@@ -72,7 +76,10 @@ void print_double_shortest(long double num, int precision, int width,
                            int right_padding, char pading_symbol, int plus_sgn,
                            int space_symbol, int capital, int point_forced,
                            char* dst);
-void print_shortest_part(long int power, int precision, long double num, int right_padding, char pading_symbol, int plus_sgn, int space_symbol, int capital, int point_forced,  char* dst);
+void print_shortest_part(long int power, int precision, long double num,
+                         int right_padding, char pading_symbol, int plus_sgn,
+                         int space_symbol, int capital, int point_forced,
+                         char* dst);
 void delete_zeros(char* str);
 void correct_padding(char* str);
 #endif

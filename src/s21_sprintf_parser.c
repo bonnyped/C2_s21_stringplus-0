@@ -90,11 +90,13 @@ void execute_pattern(int data_type, va_list* args, char* dst,
     switch (data_type) {
       case TYPE_POINTER:
         pointer_arg = va_arg(*args, void*);
-        print_hexadecimal((unsigned long int)pointer_arg, executable_pattern.precision,
-                          executable_pattern.width,
-                          executable_pattern.pattern_flags.minus_sgn,
-                          executable_pattern.padding_char, executable_pattern.pattern_flags.plus_sgn,
-                   executable_pattern.pattern_flags.space_char, 1, 0, 1, dst);
+        print_hexadecimal(
+            (unsigned long int)pointer_arg, executable_pattern.precision,
+            executable_pattern.width,
+            executable_pattern.pattern_flags.minus_sgn,
+            executable_pattern.padding_char,
+            executable_pattern.pattern_flags.plus_sgn,
+            executable_pattern.pattern_flags.space_char, 1, 0, 1, dst);
         break;
       case TYPE_INT:
         execute_int_pattern(args, dst, executable_pattern);
@@ -148,8 +150,9 @@ void execute_hex_oct_pattern(int data_type, va_list* args, char* dst,
       print_hexadecimal(long_uint_arg, executable_pattern.precision,
                         executable_pattern.width,
                         executable_pattern.pattern_flags.minus_sgn,
-                        executable_pattern.padding_char, executable_pattern.pattern_flags.plus_sgn,
-                   executable_pattern.pattern_flags.space_char,
+                        executable_pattern.padding_char,
+                        executable_pattern.pattern_flags.plus_sgn,
+                        executable_pattern.pattern_flags.space_char,
                         executable_pattern.pattern_flags.reshetka,
                         executable_pattern.pattern_flags.is_capital, 0, dst);
       break;
