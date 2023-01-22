@@ -423,7 +423,7 @@ void *s21_insert(const char *src, const char *str, s21_size_t start_index_trimed
         length_src = s21_strlen(src);
         length_str = s21_strlen(str);
         if(start_index_trimed_buffer <= length_src){
-        srcstr = calloc(length_src + length_str + 1, sizeof(char));
+        srcstr = (char*)calloc((length_src + length_str + 1), sizeof(char));
         if(length_str > 0){
         if(srcstr){
             for(s21_size_t i = 0; i < length_src + length_str; i++){
@@ -436,8 +436,8 @@ void *s21_insert(const char *src, const char *str, s21_size_t start_index_trimed
                 } else {
                 count > 0 ? (srcstr[start_index_for_strsrc] = src[i - 1]) : (srcstr[start_index_for_strsrc] = src[i]);
                 start_index_for_strsrc++;
-                if(i == length_str +length_src - 1){
-                    srcstr[start_index_for_strsrc + i + 1] = '\0';
+                if(i == length_str + length_src - 1){
+                    srcstr[length_str + length_src] = '\0';
                 }
             }
             }
