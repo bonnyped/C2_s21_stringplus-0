@@ -47,6 +47,11 @@ void print_string(char* string, char* dst, int precision, int width,
     add_padding(width - str_len, pading_symbol, dst);
   }
   }
+  else {
+  if (precision == -1){
+  precision = 6;}
+  print_string("(null)", dst, precision>=6?precision:0, width, right_padding, pading_symbol);
+  }
 }
 
 void print_int(void* number, int precision, int width, int right_padding,
