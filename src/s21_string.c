@@ -252,6 +252,9 @@ char* s21_strrchr(const char *str, int ch){
     char *pointer = s21_NULL;
     if(str && ch >= 0 && ch <= 255 ){
         int i = 0;
+        if(ch == '\0'){
+          pointer = (char*)&str[s21_strlen(str)];
+        }
         while(str[i] != '\0'){
             if(str[i] == ch){
                 pointer = (char*)str + i;
