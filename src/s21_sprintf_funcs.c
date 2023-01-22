@@ -119,6 +119,7 @@ void print_octal(long unsigned int number, int precision, int width,
       }
       printed_len = s21_strlen(tmp);
     }
+    if (precision == 0 && is_zero(&number, TYPE_LONG_UNSIGNED_INT)){printed_len = 0;}
     if (width > printed_len && !right_padding) {
       add_padding(width - (printed_len), pading_symbol, dst);
     }
@@ -164,6 +165,9 @@ void print_hexadecimal(long unsigned int number, int precision, int width,
   char* tmp = malloc(sizeof(char) * (40 + num_width));
   if (tmp != s21_NULL) {
     tmp[0] = 0;
+    if (pointer && number == 0) {plus = 0; space = 0; precision = 0;
+   // if (!right_padding) {width =0}
+    }
     if(plus && pointer){print_char('+', tmp, 1, 0, pading_symbol);}
     else if(space && pointer){print_char(' ', tmp, 1, 0, pading_symbol);}
     if (prefix && number != 0) {
@@ -175,13 +179,14 @@ void print_hexadecimal(long unsigned int number, int precision, int width,
       print_string("(nil)", tmp, -1, 0, 0, pading_symbol);
       printed_len = s21_strlen("(nil)");
     }
-    if (precision > 0 && precision > printed_len) {
-      int difference = precision - (printed_len - prefix*2);
+    if (precision > 0 && precision > (printed_len - prefix*2*(number==0?0:1))) {
+      int difference = precision - (printed_len - prefix*2*(number==0?0:1));
       for (; difference > 0; difference--) {
         print_char('0', tmp, 1, 0, pading_symbol);
       }
       printed_len = s21_strlen(tmp);
     }
+    if (precision == 0 && is_zero(&number, TYPE_LONG_UNSIGNED_INT) && !pointer){printed_len = 0;}
     if (width > printed_len && !right_padding) {
       if (pading_symbol == '0') {
         add_padding(width - (printed_len), pading_symbol, tmp);
