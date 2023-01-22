@@ -62,7 +62,7 @@
 #test s21_sprintf_f_8_nan_inf_point
   char res[200];
   char resorig[200];
-  char format[100] = "%.f %.f %.f";
+  char format[100] = "%.g %.e %.f";
   float a = -1000./0.;
   float b = 0.0 / 0.0;
   float c = 100./0.;

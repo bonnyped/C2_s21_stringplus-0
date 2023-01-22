@@ -66,12 +66,13 @@ void print_int(void* number, int precision, int width, int right_padding,
   } else { printing_len = 0; }
   int number_sgn = get_int_sign(number, type);
   printing_len += (plus_sgn || space_symbol || (minus_sgn && number_sgn == -1));
+  if(pading_symbol == '0') {print_sign(plus_sgn, minus_sgn, space_symbol, number_sgn, dst);}
   if (width > printing_len && !right_padding) {
     add_padding(width - (printing_len), pading_symbol, dst);
   }
   if (array != s21_NULL) {
     int_to_chars(number, array_len, array, type);
-    print_sign(plus_sgn, minus_sgn, space_symbol, number_sgn, dst);
+    if(pading_symbol == ' ') {print_sign(plus_sgn, minus_sgn, space_symbol, number_sgn, dst);}
     if (precision > 0 && precision > (int)array_len) {
       int difference = precision - (int)array_len;
       for (; difference > 0; difference--) {

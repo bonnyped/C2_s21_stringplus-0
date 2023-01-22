@@ -54,7 +54,7 @@
 #test s21_sprintf_d_1_7
   char res[200] = "\0";
   char resorig[200] = "\0";
-  char format[50] = "%+0hd HaMlEt % 0hd To be.. %-0hd %00hd";
+  char format[50] = "%+0hd HaMlEt % 0hd To be.. %-0hd %00hu";
   short int a = SHRT_MAX;
   short int b = SHRT_MIN;
   short c = 0;
@@ -65,10 +65,10 @@
 #test s21_sprintf_d_1_8
   char res[200] = "\0";
   char resorig[200] = "\0";
-  char format[50] = "%+0hd HaMlEt % 0hd To be.. %-0hd %00hd";
+  char format[50] = "%+0hd HaMlEt % 0hd To be.. %-0hd %00hu";
   short int a = SHRT_MAX;
   short int b = SHRT_MIN;
-  short c = 0;
+  short int c = 0;
    unsigned short d = USHRT_MAX;
   ck_assert_int_eq(sprintf(res, format, a,b, c, d), s21_sprintf(resorig, format, a,b, c, d));
   ck_assert_str_eq(res, resorig);
