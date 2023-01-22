@@ -353,10 +353,6 @@ void print_double(long double num, int precision, int width, int right_padding,
     } else {
       whole_len = 1;
     }
-    // int next_digigt = fmodl(num * powl(10, precision +2), 10);
-    //  if (next_digigt >= 5) {
-    //   num = num + 0.5 * powl(10, -precision -1);
-    // }
     char* tmp = malloc(sizeof(char) * (precision + 3 + whole_len));
     int printed_len = precision + whole_len + (precision > 0 || point_forced) +
                       (plus_sgn || space_symbol || number_sgn == -1);
@@ -399,16 +395,16 @@ int check_special_float_nums(long double num, int width, int right_padding,
   int result = 0;
   int sign = signbit(num);
   int printed_len = 3 + (plus_sgn || space_symbol || sign != 0);
-  if (isnan(num) || isinf(num)) {
+  if (isnan((float)num) || isinf((float)num)) {
     if (width > printed_len && !right_padding) {
       add_padding(width - printed_len, pading_symbol, dst);
     }
   }
-  if (isnan(num)) {
+  if (isnan((float)num)!=0) {
     print_inf_nan_sgn(sign, plus_sgn, space_symbol, dst);
     print_string("nan", dst, -1, 0, 0, ' ');
     result = 1;
-  } else if (isinf(num)) {
+  } else if (isinf((float)num)) {
     print_inf_nan_sgn(sign, plus_sgn, space_symbol, dst);
     print_string("inf", dst, -1, 0, 0, ' ');
     result = 1;
