@@ -111,7 +111,7 @@ void execute_pattern(int data_type, va_list* args, char* dst,
 void execute_chars_pattern(int data_type, va_list* args, char* dst,
                            pattern executable_pattern) {
   char* str_arg;
-  char char_arg;
+  char char_arg = '\0';
   switch (data_type) {
     case TYPE_STRING:
       str_arg = va_arg(*args, char*);

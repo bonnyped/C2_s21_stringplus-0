@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -std=c11 -c
+CFLAGS = -Wall -Wextra -Werror -std=c11 -c -g
 OS := $(shell uname)
 TEST_FLAGS = $(shell pkg-config --cflags --libs check)
 
@@ -28,7 +28,7 @@ s21_sprintf_parser.o: s21_sprintf_parser.c
 	$(CC) $(CFLAGS) s21_sprintf_parser.c -o s21_sprintf_parser.o
 
 clean:
-	rm -rf *.o *.a *.out *.info *.html *.gc* test gcov_report s21_string report test.c
+	rm -rf *.o *.a *.out *.info *.log *.html *.gc* test gcov_report s21_string report test.c
 
 gcov_report:
 	$(CC) -fprofile-arcs -ftest-coverage test.c s21_string.c s21_sprintf_funcs.c s21_sprintf_parser.c -o gcov_report -lm $(TEST_FLAGS)

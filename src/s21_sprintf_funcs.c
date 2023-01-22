@@ -7,7 +7,7 @@
 
 void print_char(char symb, char* dst, int width, int right_padding,
                 char pading_symbol) {
-  char source[2];
+  char source[2] = {0};
   source[0] = symb;
   source[1] = 0;
   if (width > 1 && !right_padding) {
@@ -28,7 +28,7 @@ void add_padding(int num, char pading_symbol, char* dst) {
 void print_string(char* string, char* dst, int precision, int width,
                   int right_padding, char pading_symbol) {
   pading_symbol = ' ';
-  s21_size_t str_len;
+  s21_size_t str_len = 0;
   if (string != s21_NULL) {
     if (precision == -1) {
       str_len = s21_strlen(string);
