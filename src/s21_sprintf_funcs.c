@@ -2,15 +2,8 @@
 
 #include <math.h>
 #include <stdlib.h>
-#include <stdio.h>
-#include "s21_string.h"
 
-/*%% template
-* DELETE 1, 0 FROM PRINT CHAR MAKE MACRO!
-WCHAR_T
-MANY FUNCS CODE DUP PROBLEM CAN BE SOLVED WITH CAST TO HIGHER TYPE AND BACKCAST
-IN FUNCTION
-*/
+#include "s21_string.h"
 
 void print_char(char symb, char* dst, int width, int right_padding,
                 char pading_symbol) {
@@ -53,8 +46,6 @@ void print_string(char* string, char* dst, int precision, int width,
   }
 }
 
-// precision 0 number 0, widdth >0?
-// minus sign width and prec check!!
 void print_int(void* number, int precision, int width, int right_padding,
                char pading_symbol, int plus_sgn, int minus_sgn,
                int space_symbol, char* dst, int type) {
@@ -63,16 +54,22 @@ void print_int(void* number, int precision, int width, int right_padding,
   int printing_len = precision > (int)array_len ? precision : (int)array_len;
   if (precision != 0 || (precision == 0 && !is_zero(number, type))) {
     array = malloc(sizeof(char) * array_len);
-  } else { printing_len = 0; }
+  } else {
+    printing_len = 0;
+  }
   int number_sgn = get_int_sign(number, type);
   printing_len += (plus_sgn || space_symbol || (minus_sgn && number_sgn == -1));
-  if(pading_symbol == '0') {print_sign(plus_sgn, minus_sgn, space_symbol, number_sgn, dst);}
+  if (pading_symbol == '0') {
+    print_sign(plus_sgn, minus_sgn, space_symbol, number_sgn, dst);
+  }
   if (width > printing_len && !right_padding) {
     add_padding(width - (printing_len), pading_symbol, dst);
   }
   if (array != s21_NULL) {
     int_to_chars(number, array_len, array, type);
-    if(pading_symbol == ' ') {print_sign(plus_sgn, minus_sgn, space_symbol, number_sgn, dst);}
+    if (pading_symbol == ' ') {
+      print_sign(plus_sgn, minus_sgn, space_symbol, number_sgn, dst);
+    }
     if (precision > 0 && precision > (int)array_len) {
       int difference = precision - (int)array_len;
       for (; difference > 0; difference--) {
@@ -291,11 +288,11 @@ int is_zero(void* number, int type) {
   return result;
 }
 
-// prec+w+printing len check INF SGN
 void print_double(long double num, int precision, int width, int right_padding,
                   char pading_symbol, int plus_sgn, int space_symbol,
                   int point_forced, char* dst) {
-  if (!check_special_float_nums(num,width,right_padding, pading_symbol, plus_sgn, space_symbol, dst)) {
+  if (!check_special_float_nums(num, width, right_padding, pading_symbol,
+                                plus_sgn, space_symbol, dst)) {
     int number_sgn = 0;
     int whole_len;
     if (num < 0) {
@@ -310,8 +307,8 @@ void print_double(long double num, int precision, int width, int right_padding,
       whole_len = 1;
     }
     char* tmp = malloc(sizeof(char) * (precision + 3 + whole_len));
-    int printed_len = precision + whole_len + (precision > 0 || point_forced)+
-                    (plus_sgn || space_symbol || number_sgn == -1);
+    int printed_len = precision + whole_len + (precision > 0 || point_forced) +
+                      (plus_sgn || space_symbol || number_sgn == -1);
     if (width > printed_len && !right_padding) {
       add_padding(width - printed_len, pading_symbol, dst);
     }
@@ -319,7 +316,7 @@ void print_double(long double num, int precision, int width, int right_padding,
       tmp[0] = 0;
       print_sign(plus_sgn, 1, space_symbol, number_sgn, tmp);
       if (whole_len > 1 || whole_part != 0) {
-        print_whole_float(precision == 0?roundl(num):whole_part, tmp);
+        print_whole_float(precision == 0 ? roundl(num) : whole_part, tmp);
       } else {
         print_char('0', tmp, 1, 0, pading_symbol);
       }
@@ -329,8 +326,6 @@ void print_double(long double num, int precision, int width, int right_padding,
       int next_digigt = fmodl(fract_part * powl(10, precision + 1), 10);
       if (next_digigt >= 5) {
         fract_part = fract_part + 0.5 * powl(10, -precision);
-      //} else {
-      //fract_part = fract_part + 0.1 * powl(10, -precision); // tmp fix for rounding issues -764231539. with .11 prec
       }
       print_fractional_float(fract_part, precision, 0, tmp);
       print_string(tmp, dst, -1, 0, 0, pading_symbol);
@@ -342,21 +337,22 @@ void print_double(long double num, int precision, int width, int right_padding,
   }
 }
 
-int check_special_float_nums(long double num, int width,
-                           int right_padding, char pading_symbol,int plus_sgn, int space_symbol, char* dst) {
+int check_special_float_nums(long double num, int width, int right_padding,
+                             char pading_symbol, int plus_sgn, int space_symbol,
+                             char* dst) {
   int result = 0;
-  int printed_len = 3  + (plus_sgn || space_symbol || signbit(num) != 0);
-  if (isnan(num) || isinf(num)){
-  if (width > printed_len && !right_padding) {
+  int printed_len = 3 + (plus_sgn || space_symbol || signbit(num) != 0);
+  if (isnan(num) || isinf(num)) {
+    if (width > printed_len && !right_padding) {
       add_padding(width - printed_len, pading_symbol, dst);
     }
   }
   if (isnan(num)) {
     if (signbit(num) == 0) {
-      if(plus_sgn) {
-      print_char('+', dst, 0, 0, ' ');
-      } else if(space_symbol) {
-      print_char(' ', dst, 0, 0, ' ');
+      if (plus_sgn) {
+        print_char('+', dst, 0, 0, ' ');
+      } else if (space_symbol) {
+        print_char(' ', dst, 0, 0, ' ');
       }
     } else {
       print_char('-', dst, 0, 0, ' ');
@@ -365,10 +361,10 @@ int check_special_float_nums(long double num, int width,
     result = 1;
   } else if (isinf(num)) {
     if (signbit(num) == 0) {
-      if(plus_sgn) {
-      print_char('+', dst, 0, 0, ' ');
-      } else if(space_symbol) {
-      print_char(' ', dst, 0, 0, ' ');
+      if (plus_sgn) {
+        print_char('+', dst, 0, 0, ' ');
+      } else if (space_symbol) {
+        print_char(' ', dst, 0, 0, ' ');
       }
     } else {
       print_char('-', dst, 0, 0, ' ');
@@ -376,8 +372,8 @@ int check_special_float_nums(long double num, int width,
     print_string("inf", dst, -1, 0, 0, ' ');
     result = 1;
   }
-  if(result){
-  if (width > printed_len && right_padding) {
+  if (result) {
+    if (width > printed_len && right_padding) {
       add_padding(width - printed_len, pading_symbol, dst);
     }
   }
@@ -409,184 +405,149 @@ void print_whole_float(long double num, char* dst) {
 }
 
 long double round_double(long double num, int* power, int precision) {
-    int tmpq = fmodl(num * powl(10, -precision), 10);
-    if (tmpq >= 5) {
-
-        num = num + 0.5 * powl(10, (*power) - precision);
-        if (num != 0.f) {
-            *power = log10l(num);
-            if (*power <= 0) {
-                (*power)--;
-            }
-        }
-        else { *power = 0; };
-    }
-    return num;
+  int tmpq = fmodl(num * powl(10, -precision), 10);
+  if (tmpq >= 5) {
+    num = num + 0.5 * powl(10, (*power) - precision);
+    if (num != 0.f) {
+      *power = log10l(num);
+      if (*power <= 0) {
+        (*power)--;
+      }
+    } else {
+      *power = 0;
+    };
+  }
+  return num;
 }
-
 
 void print_double_scientific(long double num, int precision, int width,
                              int right_padding, char pading_symbol,
                              int plus_sgn, int space_symbol, int capital,
                              int point_forced, char* dst) {
-if (!check_special_float_nums(num,width,right_padding, pading_symbol, plus_sgn, space_symbol, dst)) {
-  int number_sgn = 0;
-  char* start_of_num = &dst[s21_strlen(dst)];
-  if (num < 0) {
-    number_sgn = -1;
-    num = -num;
-  }
-  long int power = get_power(num);
-  if(power<precision){
-  num = round_double(num, (int*)&power, precision);
-  }
-  int power_len = (int)number_length(&power, TYPE_LONG_INT);
-  if (power_len < 2) {power_len = 2;}
-  int num_len = 3 + power_len  + (precision > 0 || point_forced) + precision + (plus_sgn || space_symbol || number_sgn == -1);
-  if (width > num_len && !right_padding) {
-    add_padding(width - num_len, pading_symbol, dst);
-  }
-  print_sign(plus_sgn, 1, space_symbol, number_sgn, dst);
-  print_double(num * powl(10, -power), precision, 0, 0, pading_symbol, 0, 0,
-               point_forced, dst);
-  if(!right_padding && (plus_sgn || space_symbol || number_sgn == -1)){correct_padding(start_of_num);}
-  if (capital) {
-    print_char('E', dst, 0, 0, pading_symbol);
-  } else {
-    print_char('e', dst, 0, 0, pading_symbol);
-  }
-  print_int(&power, 2, 0, 0, pading_symbol, 1, 1, 0, dst, TYPE_INT);
-  if (width > num_len && right_padding) {
-    add_padding(width - num_len, pading_symbol, dst);
-  }
-}
-}
-
-long int get_power(long double num){
-long int result;
-  if (num == 0.f) { result = 0; }
-        else {
-            result = log10l(num);
-            if (result <= 0) {
-            result--;
-        }  
-        }
-   return result;
-}
-// vezde LONG DOUBLE!!! PEW PEW
-/*void print_double_shortest(long double num, int precision, int width,
-                           int right_padding, char pading_symbol, int plus_sgn,
-                           int space_symbol, int capital, int point_forced,
-                           char* dst) {
-  // int number_sgn = 0;
-  int whole_len;
-  int real_precision = precision;
-  int num_of_preceding_zeros = 0;
-  long double original_num = num;
-  if (num < 0) {
-    // number_sgn = -1;
-    num = -num;
-  }
-  long double whole_part;
-  modfl(num, &whole_part);
-  if (whole_part >= 1.0) {
-    whole_len = log10l(whole_part) + 1;
-    real_precision = precision - whole_len;
-    if (real_precision < 0) {
-      real_precision = 0;
+  if (!check_special_float_nums(num, width, right_padding, pading_symbol,
+                                plus_sgn, space_symbol, dst)) {
+    int number_sgn = 0;
+    char* start_of_num = &dst[s21_strlen(dst)];
+    if (num < 0) {
+      number_sgn = -1;
+      num = -num;
     }
-  } else {
-    whole_len = 1;
-    for (; num < 1.0; num = num * 10, num_of_preceding_zeros++) {
+    long int power = get_power(num);
+    if (power < precision) {
+      num = round_double(num, (int*)&power, precision);
     }
-    num_of_preceding_zeros--;
-    real_precision += num_of_preceding_zeros;
-  }
-  int num_len_normal = whole_len + 1 + real_precision;
-  if (real_precision == 0) {
-    num_len_normal--;
-  }
-  int num_len_scientific = (precision) + 5;
-
-  if (num_len_scientific > num_len_normal) {
-    print_double(original_num, real_precision, width, right_padding,
-                 pading_symbol, plus_sgn, space_symbol, point_forced, dst);
-  } else {
-    print_double_scientific(original_num, precision - 1, width, right_padding,
-                            pading_symbol, plus_sgn, space_symbol, capital,
-                            point_forced, dst);
+    int power_len = (int)number_length(&power, TYPE_LONG_INT);
+    if (power_len < 2) {
+      power_len = 2;
+    }
+    int num_len = 3 + power_len + (precision > 0 || point_forced) + precision +
+                  (plus_sgn || space_symbol || number_sgn == -1);
+    if (width > num_len && !right_padding) {
+      add_padding(width - num_len, pading_symbol, dst);
+    }
+    print_sign(plus_sgn, 1, space_symbol, number_sgn, dst);
+    print_double(num * powl(10, -power), precision, 0, 0, pading_symbol, 0, 0,
+                 point_forced, dst);
+    if (!right_padding && (plus_sgn || space_symbol || number_sgn == -1)) {
+      correct_padding(start_of_num);
+    }
+    if (capital) {
+      print_char('E', dst, 0, 0, pading_symbol);
+    } else {
+      print_char('e', dst, 0, 0, pading_symbol);
+    }
+    print_int(&power, 2, 0, 0, pading_symbol, 1, 1, 0, dst, TYPE_INT);
+    if (width > num_len && right_padding) {
+      add_padding(width - num_len, pading_symbol, dst);
+    }
   }
 }
-*/
 
+long int get_power(long double num) {
+  long int result;
+  if (num == 0.f) {
+    result = 0;
+  } else {
+    result = log10l(num);
+    if (result <= 0) {
+      result--;
+    }
+  }
+  return result;
+}
 
-//PROBLEM WITH ZERO NUMBER
 void print_double_shortest(long double num, int precision, int width,
                            int right_padding, char pading_symbol, int plus_sgn,
                            int space_symbol, int capital, int point_forced,
                            char* dst) {
-    if (!check_special_float_nums(num,width,right_padding, pading_symbol, plus_sgn, space_symbol, dst)) {
-    	char* start_of_num = &dst[s21_strlen(dst)];
-        long double original_num = num;
-        if (num < 0) {
-            num = -num;
-        }
-        long int power = get_power(num);
-        char* tmp = malloc(sizeof(char) * (width + 300)) ;
-        tmp[0] = 0;
-        if (precision == 0) { precision = 1; }
-            original_num = round_double(original_num, (int*)&power, precision);
-        if (power < precision && power >= -4) {
-            print_double(original_num, precision - 1 - power, 0, right_padding,
-                pading_symbol, plus_sgn, space_symbol, point_forced, tmp);
-            if (!point_forced && precision - 1 - power > 0) { delete_zeros(tmp); }
-            //if (num == 0.f) {delete_zeros(tmp, point_forced);}
-        }
-        else {
-            print_double(original_num * powl(10, -power), precision - 1, 0, 0, pading_symbol, plus_sgn, space_symbol,
-                point_forced, tmp);
-            if (!point_forced) { delete_zeros(tmp); }
-
-            if (capital) {
-                print_char('E', tmp, 0, 0, pading_symbol);
-            }
-            else {
-                print_char('e', tmp, 0, 0, pading_symbol);
-            }
-            print_int(&power, 2, 0, 0, pading_symbol, 1, 1, 0, tmp, TYPE_INT);
-        }
-        int num_len = (int)s21_strlen(tmp);
-        int padding_added = 0;
-        if (width > num_len && !right_padding) {
-        padding_added = 1;
-    add_padding(width - num_len, pading_symbol, dst);
-  }
-        print_string(tmp, dst, -1, 0, right_padding, pading_symbol);
-        if(!right_padding && (plus_sgn || space_symbol || original_num <0 ) && padding_added){correct_padding(start_of_num);}
-        if (width > num_len && right_padding) {
-    add_padding(width - num_len, ' ', dst);
-  }
-  free(tmp);
+  if (!check_special_float_nums(num, width, right_padding, pading_symbol,
+                                plus_sgn, space_symbol, dst)) {
+    char* start_of_num = &dst[s21_strlen(dst)];
+    long double original_num = num;
+    if (num < 0) {
+      num = -num;
     }
+    long int power = get_power(num);
+    char* tmp = malloc(sizeof(char) * (width + 300));
+    tmp[0] = 0;
+    if (precision == 0) {
+      precision = 1;
+    }
+    original_num = round_double(original_num, (int*)&power, precision);
+    if (power < precision && power >= -4) {
+      print_double(original_num, precision - 1 - power, 0, right_padding,
+                   pading_symbol, plus_sgn, space_symbol, point_forced, tmp);
+      if (!point_forced && precision - 1 - power > 0) {
+        delete_zeros(tmp);
+      }
+      // if (num == 0.f) {delete_zeros(tmp, point_forced);}
+    } else {
+      print_double(original_num * powl(10, -power), precision - 1, 0, 0,
+                   pading_symbol, plus_sgn, space_symbol, point_forced, tmp);
+      if (!point_forced) {
+        delete_zeros(tmp);
+      }
+
+      if (capital) {
+        print_char('E', tmp, 0, 0, pading_symbol);
+      } else {
+        print_char('e', tmp, 0, 0, pading_symbol);
+      }
+      print_int(&power, 2, 0, 0, pading_symbol, 1, 1, 0, tmp, TYPE_INT);
+    }
+    int num_len = (int)s21_strlen(tmp);
+    int padding_added = 0;
+    if (width > num_len && !right_padding) {
+      padding_added = 1;
+      add_padding(width - num_len, pading_symbol, dst);
+    }
+    print_string(tmp, dst, -1, 0, right_padding, pading_symbol);
+    if (!right_padding && (plus_sgn || space_symbol || original_num < 0) &&
+        padding_added) {
+      correct_padding(start_of_num);
+    }
+    if (width > num_len && right_padding) {
+      add_padding(width - num_len, ' ', dst);
+    }
+    free(tmp);
+  }
 }
 
 void delete_zeros(char* str) {
-    int i = s21_strlen(str);
-   
-    while (str[--i] == '0') {
-        str[i] = 0;
-        //i--;
-    }
-    if (str[i] == '.') {
-    	str[i] = 0;
-    }
+  int i = s21_strlen(str);
+
+  while (str[--i] == '0') {
+    str[i] = 0;
+    // i--;
+  }
+  if (str[i] == '.') {
+    str[i] = 0;
+  }
 }
 
-
-void correct_padding(char* str){
-char* search_result = s21_strpbrk(str, " +-");
-char tmp = *str;
-*str = *search_result;
-*search_result = tmp;
+void correct_padding(char* str) {
+  char* search_result = s21_strpbrk(str, " +-");
+  char tmp = *str;
+  *str = *search_result;
+  *search_result = tmp;
 }
-

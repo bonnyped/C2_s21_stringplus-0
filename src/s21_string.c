@@ -85,7 +85,7 @@ int s21_sprintf(char* dst, const char* format_string, ...) {
       int* pointer = (int*)va_arg(args, int*);
       *pointer = (int)s21_strlen(dst);
       format_string = format_string + 2;
-    }else {
+    } else {
       int data_type = get_format_type(format_string);
       if (data_type != NOT_VALID_RESULT) {
         format_string++;

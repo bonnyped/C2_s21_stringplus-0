@@ -2,8 +2,6 @@
 
 #include "s21_string.h"
 
-/*Specifiers: n*/
-
 int get_format_type(const char* format_string) {
   int result = NOT_VALID_RESULT;
   char correct_formats[] = "ducsfeoxpgiEXG";
@@ -122,8 +120,7 @@ void execute_chars_pattern(int data_type, va_list* args, char* dst,
     case TYPE_CHAR:
       char_arg = va_arg(*args, int);
       print_char(char_arg, dst, executable_pattern.width,
-                 executable_pattern.pattern_flags.minus_sgn,
-                 ' ');
+                 executable_pattern.pattern_flags.minus_sgn, ' ');
       break;
   }
 }
@@ -248,15 +245,16 @@ pattern read_pattern(const char** format_string, pattern result) {
       set_result = num_param_set(&curr_ptr, &(result.width));
       state = PRECISION_STATE;
     }
-    if (state <= PRECISION_STATE && !set_result && *curr_ptr == '.' ) {
-    int shift = 1;
+    if (state <= PRECISION_STATE && !set_result && *curr_ptr == '.') {
+      int shift = 1;
       if ((result_of_search - curr_ptr > 1)) {
         curr_ptr++;
         shift--;
         set_result = num_param_set(&curr_ptr, &(result.precision));
-      } 
+      }
       if (!set_result) {
-        set_result = check_zero_precision(*(curr_ptr + shift), &(result.precision));
+        set_result =
+            check_zero_precision(*(curr_ptr + shift), &(result.precision));
         curr_ptr = curr_ptr - (1 - shift);
       }
       state = LENGTH_STATE;
@@ -298,18 +296,18 @@ int flag_set(char symbol, pattern* pattern_to_set) {
   return result;
 }
 
-int check_zero_precision(const char symb, int* precision){
-	char correct_next_symb[] = "ducsfeoxpgiEXGhlL";
-	int i = 0;
-	int found = 0;
-	while(correct_next_symb[i] && !found){
-		if(symb == correct_next_symb[i]){
-			found = 1;
-			*precision = 0;
-		}
-		i++;
-	}
-	return found;
+int check_zero_precision(const char symb, int* precision) {
+  char correct_next_symb[] = "ducsfeoxpgiEXGhlL";
+  int i = 0;
+  int found = 0;
+  while (correct_next_symb[i] && !found) {
+    if (symb == correct_next_symb[i]) {
+      found = 1;
+      *precision = 0;
+    }
+    i++;
+  }
+  return found;
 }
 
 int num_param_set(const char** str, int* param) {

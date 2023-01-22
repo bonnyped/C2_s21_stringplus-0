@@ -13,19 +13,15 @@ Flags: #, 0 РЕШЕТКА У %g - оставляет нули без решетки если все нули то не
 description: .* Length description: L add all to parser!!!
 */
 int main() {
-  char str1[300];
-  char str2[300];
-  char *str3 = "Third test: %010e|\nForth test: %010.e|\nFifth test: %0.0e!|";
-  double num =
-      -5921563224775977777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777776.;
- 
-  int w = sprintf(str1, str3, num, num, num);
-int ww =                    s21_sprintf(str2, str3, num, num, num);
+  char str1[400];
+  char str2[400];
+  char *str3 = "test: %.6Lg!\ntest: %.Lg!";
+  long double num = 9999.999999;
+  sprintf(str1, str3, num, num);
 
-  printf("%s\n",str1);
-  printf("|%d|\n", w);
-  printf("%s\n",str2);
-  printf("|%d|\n", ww);
-  
+  s21_sprintf(str2, str3, num, num);
 
+  printf("%s\n", str1);
+
+  printf("%s\n", str2);
 }
