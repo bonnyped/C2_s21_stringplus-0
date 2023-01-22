@@ -119,11 +119,12 @@ char* s21_strchr(const char* str, int c) {
 }
 
 int s21_strcmp(const char *str1, const char *str2) {
+
   const char *s21_str1 = (const char *)str1;
   const char *s21_str2 = (const char *)str2;
   int stop = 0;
   int status = 0;
-  while (stop == 0) {
+  while (str1 && str2 &&stop == 0) {
     if ((*s21_str1 == '\0' || *s21_str2 == '\0') || (*s21_str1 - *s21_str2 != 0)) {
       stop = 1;
       if (*s21_str1 - *s21_str2 != 0) {
@@ -206,8 +207,8 @@ s21_size_t s21_strcspn(const char *str1, const char *str2) {
 
 char *s21_strerror(int errnum) {
   char *str_error = NULL;
+  static char buffer_error[4500];
   if (errnum < 0 || errnum > ARRAY_SIZE) {
-    char buffer_error[4500];
     sprintf(buffer_error, "%s%d", UNKNOWN_ERROR, errnum); // s21_sprintf
     str_error = buffer_error;
   } else {
