@@ -27,11 +27,13 @@ void add_padding(int num, char pading_symbol, char* dst) {
 
 void print_string(char* string, char* dst, int precision, int width,
                   int right_padding, char pading_symbol) {
+                  pading_symbol = ' ';
   s21_size_t str_len;
+  if(string != s21_NULL){
   if (precision == -1) {
     str_len = s21_strlen(string);
   } else {
-    str_len = precision;
+    str_len = s21_strlen(string)<(long long unsigned int)precision?s21_strlen(string):(long long unsigned int)precision;
   }
   if ((int)str_len < width && !right_padding) {
     add_padding(width - str_len, pading_symbol, dst);
@@ -43,6 +45,7 @@ void print_string(char* string, char* dst, int precision, int width,
   }
   if ((int)str_len < width && right_padding) {
     add_padding(width - str_len, pading_symbol, dst);
+  }
   }
 }
 
@@ -316,6 +319,10 @@ void print_double(long double num, int precision, int width, int right_padding,
     } else {
       whole_len = 1;
     }
+    //int next_digigt = fmodl(num * powl(10, precision +2), 10);
+     // if (next_digigt >= 5) {
+      //  num = num + 0.5 * powl(10, -precision -1);
+      //}
     char* tmp = malloc(sizeof(char) * (precision + 3 + whole_len));
     int printed_len = precision + whole_len + (precision > 0 || point_forced) +
                       (plus_sgn || space_symbol || number_sgn == -1);
