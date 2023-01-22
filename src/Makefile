@@ -53,7 +53,7 @@ leak:
 ifeq ($(OS),Darwin)
 	CK_FORK=no leaks -atExit -- ./test
 else
-	CK_FORK=no valgrind --leak-check=full -s --track-origins=yes ./test
+	valgrind --leak-check=full -s --track-origins=yes --log-file=leak.log ./test
 endif	
 
 rebuild: all

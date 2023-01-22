@@ -1,3 +1,5 @@
+#suite sprintf_test
+
 #test float_test
   float a = 2.42;
   float d = 1.62;

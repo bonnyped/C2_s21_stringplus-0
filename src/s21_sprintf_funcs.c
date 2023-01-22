@@ -348,6 +348,8 @@ void print_double(long double num, int precision, int width, int right_padding,
     long double fract_part = modfl(num, &whole_part);
     if (whole_part > 0) {
       whole_len = log10l(whole_part) + 1;
+      if (whole_len < 0)
+        whole_len = 2000;
     } else {
       whole_len = 1;
     }

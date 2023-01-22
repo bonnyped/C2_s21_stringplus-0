@@ -1,3 +1,5 @@
+#suite float_zero_nan_test
+
 #test s21_sprintf_f_1_nan_inf
   char res[200];
   char resorig[200];
