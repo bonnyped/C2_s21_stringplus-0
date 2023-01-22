@@ -150,12 +150,7 @@ void print_hexadecimal(long unsigned int number, int precision, int width,
   if (tmp != s21_NULL) {
     tmp[0] = 0;
     if (prefix && number != 0) {
-      print_char('0', tmp, 0, 0, pading_symbol);
-      if (in_upper_case) {
-        print_char('X', tmp, 0, 0, pading_symbol);
-      } else {
-        print_char('x', tmp, 0, 0, pading_symbol);
-      }
+      print_prefix('X', 'x', in_upper_case, 1, tmp);
     }
     print_hexa_oct_num_part(number, 16, in_upper_case, pointer, pading_symbol, tmp);
     int printed_len = s21_strlen(tmp);
@@ -188,6 +183,17 @@ void print_hexadecimal(long unsigned int number, int precision, int width,
     }
     free(tmp);
   }
+}
+
+void print_prefix(char symbol_up, char symbol, int in_upper_case, int print_zero, char* dst ) {
+	if(print_zero){
+	print_char('0', dst, 0, 0, ' ');
+	}
+      if (in_upper_case) {
+        print_char(symbol_up, dst, 0, 0, ' ');
+      } else {
+        print_char(symbol, dst, 0, 0, ' ');
+      }
 }
 
 char hex_char_from_num(int num, int capital) {
@@ -438,11 +444,7 @@ void print_double_scientific(long double num, int precision, int width,
     if (!right_padding && (plus_sgn || space_symbol || number_sgn == -1)) {
       correct_padding(start_of_num);
     }
-    if (capital) {
-      print_char('E', dst, 0, 0, pading_symbol);
-    } else {
-      print_char('e', dst, 0, 0, pading_symbol);
-    }
+    print_prefix('E', 'e', capital, 0, dst );
     print_int(&power, 2, 0, 0, pading_symbol, 1, 1, 0, dst, TYPE_INT);
     if (width > num_len && right_padding) {
       add_padding(width - num_len, pading_symbol, dst);
@@ -481,27 +483,7 @@ void print_double_shortest(long double num, int precision, int width,
       precision = 1;
     }
     original_num = round_double(original_num, (int*)&power, precision);
-    if (power < precision && power >= -4) {
-      print_double(original_num, precision - 1 - power, 0, right_padding,
-                   pading_symbol, plus_sgn, space_symbol, point_forced, tmp);
-      if (!point_forced && precision - 1 - power > 0) {
-        delete_zeros(tmp);
-      }
-      // if (num == 0.f) {delete_zeros(tmp, point_forced);}
-    } else {
-      print_double(original_num * powl(10, -power), precision - 1, 0, 0,
-                   pading_symbol, plus_sgn, space_symbol, point_forced, tmp);
-      if (!point_forced) {
-        delete_zeros(tmp);
-      }
-
-      if (capital) {
-        print_char('E', tmp, 0, 0, pading_symbol);
-      } else {
-        print_char('e', tmp, 0, 0, pading_symbol);
-      }
-      print_int(&power, 2, 0, 0, pading_symbol, 1, 1, 0, tmp, TYPE_INT);
-    }
+    print_shortest_part(power, precision, original_num, right_padding, pading_symbol, plus_sgn, space_symbol, capital, point_forced,  tmp);
     int num_len = (int)s21_strlen(tmp);
     int padding_added = 0;
     if (width > num_len && !right_padding) {
@@ -518,6 +500,24 @@ void print_double_shortest(long double num, int precision, int width,
     }
     free(tmp);
   }
+}
+
+void print_shortest_part(long int power, int precision, long double num, int right_padding, char pading_symbol, int plus_sgn, int space_symbol, int capital, int point_forced,  char* dst){
+if (power < precision && power >= -4) {
+      print_double(num, precision - 1 - power, 0, right_padding,
+                   pading_symbol, plus_sgn, space_symbol, point_forced, dst);
+      if (!point_forced && precision - 1 - power > 0) {
+        delete_zeros(dst);
+      }
+    } else {
+      print_double(num * powl(10, -power), precision - 1, 0, 0,
+                   pading_symbol, plus_sgn, space_symbol, point_forced, dst);
+      if (!point_forced) {
+        delete_zeros(dst);
+      }
+      print_prefix('E', 'e', capital, 0, dst );
+      print_int(&power, 2, 0, 0, pading_symbol, 1, 1, 0, dst, TYPE_INT);
+    }
 }
 
 void delete_zeros(char* str) {
