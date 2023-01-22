@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -std=c11 -c -g
+CFLAGS = -Wall -Wextra -Werror -std=c11 -c
 OS := $(shell uname)
 TEST_FLAGS = $(shell pkg-config --cflags --libs check)
 
