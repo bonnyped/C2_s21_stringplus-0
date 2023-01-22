@@ -319,12 +319,16 @@ void print_double(long double num, int precision, int width, int right_padding,
     char* tmp = malloc(sizeof(char) * (precision + 3 + whole_len));
     int printed_len = precision + whole_len + (precision > 0 || point_forced) +
                       (plus_sgn || space_symbol || number_sgn == -1);
+                      if (pading_symbol == '0') {
+    print_sign(plus_sgn, 1, space_symbol, number_sgn, dst);
+  }
     if (width > printed_len && !right_padding) {
       add_padding(width - printed_len, pading_symbol, dst);
     }
     if (tmp != s21_NULL) {
       tmp[0] = 0;
-      print_sign(plus_sgn, 1, space_symbol, number_sgn, tmp);
+      if(pading_symbol == ' ') {
+      print_sign(plus_sgn, 1, space_symbol, number_sgn, tmp);}
       if (whole_len > 1 || whole_part != 0) {
         print_whole_float(precision == 0 ? roundl(num) : whole_part, tmp);
       } else {
@@ -342,7 +346,7 @@ void print_double(long double num, int precision, int width, int right_padding,
       free(tmp);
     }
     if (width > printed_len && right_padding) {
-      add_padding(width - printed_len, pading_symbol, dst);
+      add_padding(width - printed_len, ' ', dst);
     }
   }
 }
