@@ -1,4 +1,3 @@
-#include "s21_string.h"
 #include "s21_sprintf_parser.h"
 
 #define _CRT_SECURE_NO_WARNINGS
@@ -211,7 +210,7 @@ char *s21_strerror(int errnum) {
   static char buffer_error[3000];
   static char *array_error[] = s21_error;
   if (errnum < 0 || errnum > ARRAY_SIZE) {
-    sprintf(buffer_error, "%s%d", UNKNOWN_ERROR, errnum); // s21_sprintf
+    s21_sprintf(buffer_error, "%s%d", UNKNOWN_ERROR, errnum);
     str_error = buffer_error;
   } else {
     str_error = (char *)array_error[errnum];
@@ -418,13 +417,13 @@ void *s21_to_lower(const char *str){
 void *s21_insert(const char *src, const char *str, s21_size_t start_index_trimed_buffer){
     char *srcstr = s21_NULL;
     if(src && str){
-        s21_size_t length_src, length_str;
+        s21_size_t length_src = 0, length_str = 0;
         s21_size_t count = 0;
         s21_size_t start_index_for_strsrc = 0;
         length_src = s21_strlen(src);
         length_str = s21_strlen(str);
         if(start_index_trimed_buffer <= length_src){
-        srcstr = (char*)calloc((length_src + length_str + 1), sizeof(char));
+        srcstr = (char*)calloc((length_src + length_str + 2), sizeof(char));
         if(length_str > 0){
         if(srcstr){
             for(s21_size_t i = 0; i < length_src + length_str; i++){
@@ -443,7 +442,7 @@ void *s21_insert(const char *src, const char *str, s21_size_t start_index_trimed
             }
             }
         }
-        } else if(length_str == 0){
+        } else if(length_str == 0 ) {
             srcstr = (char*)src;
         }
     }
