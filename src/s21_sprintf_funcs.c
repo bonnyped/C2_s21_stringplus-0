@@ -158,12 +158,14 @@ if (number != 0) {
 }
 
 void print_hexadecimal(long unsigned int number, int precision, int width,
-                       int right_padding, char pading_symbol, int prefix,
+                       int right_padding, char pading_symbol, int plus, int space, int prefix,
                        int in_upper_case, int pointer, char* dst) {
   int num_width = precision > width ? precision : width;
   char* tmp = malloc(sizeof(char) * (40 + num_width));
   if (tmp != s21_NULL) {
     tmp[0] = 0;
+    if(plus && pointer){print_char('+', tmp, 1, 0, pading_symbol);}
+    else if(space && pointer){print_char(' ', tmp, 1, 0, pading_symbol);}
     if (prefix && number != 0) {
       print_prefix('X', 'x', in_upper_case, 1, tmp);
     }
@@ -174,7 +176,7 @@ void print_hexadecimal(long unsigned int number, int precision, int width,
       printed_len = s21_strlen("(nil)");
     }
     if (precision > 0 && precision > printed_len) {
-      int difference = precision - printed_len;
+      int difference = precision - (printed_len - prefix*2);
       for (; difference > 0; difference--) {
         print_char('0', tmp, 1, 0, pading_symbol);
       }
@@ -189,7 +191,7 @@ void print_hexadecimal(long unsigned int number, int precision, int width,
     }
     if (precision != 0 || number != 0 || pointer) {
       if (number != 0) {
-        reverse_string(tmp + prefix * 2);
+        reverse_string(tmp + prefix * (2+ ((space||plus) && pointer)));
       }
       print_string(tmp, dst, -1, 0, 0, pading_symbol);
     }

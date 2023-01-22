@@ -40,7 +40,7 @@ void print_octal(long unsigned int number, int precision, int width,
                  int right_padding, char pading_symbol, int prefix, char* dst);
 void reverse_string(char* str);
 void print_hexadecimal(long unsigned int number, int precision, int width,
-                       int right_padding, char pading_symbol, int prefix,
+                       int right_padding, char pading_symbol,int plus, int space, int prefix,
                        int in_upper_case, int pointer, char* dst);
 void print_prefix(char symbol_up, char symbol, int in_upper_case, int print_zero, char* dst );
 char hex_char_from_num(int num, int capital);
