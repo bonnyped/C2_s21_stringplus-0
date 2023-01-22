@@ -6,7 +6,6 @@
   char format[100] = "Hello Hamlet!%n To be...";
   int a = 4; 
   int b = 4;
-  unsigned c = 0;
   ck_assert_int_eq(sprintf(res, format, &a), s21_sprintf(resorig, format, &b));
   ck_assert_str_eq(res, resorig);
   ck_assert_int_eq(a, b);

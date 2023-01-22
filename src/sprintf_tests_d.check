@@ -126,7 +126,7 @@
 #test s21_sprintf_d_3
   char res[200] = "\0";
   char resorig[200] = "\0";
-  ck_assert_int_eq(sprintf(res, "%0.d", 0), s21_sprintf(resorig, "%0.d", 0));
+  ck_assert_int_eq(sprintf(res, "%0d", 0), s21_sprintf(resorig, "%0d", 0));
   ck_assert_str_eq(res, resorig);
 
 #test s21_sprintf_d_4
@@ -156,7 +156,7 @@
 #test s21_sprintf_d_8
   char res[200] = "\0";
   char resorig[200] = "\0";
-  ck_assert_int_eq(sprintf(res, "%0.15d", 2147483647), s21_sprintf(resorig, "%0.15d", 2147483647));
+  ck_assert_int_eq(sprintf(res, "%015d", 2147483647), s21_sprintf(resorig, "%015d", 2147483647));
   ck_assert_str_eq(res, resorig);
 
 #test s21_sprintf_d_9

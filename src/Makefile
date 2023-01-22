@@ -3,26 +3,10 @@ CFLAGS = -Wall -Wextra -Werror -std=c11 -c
 OS := $(shell uname)
 TEST_FLAGS = $(shell pkg-config --cflags --libs check)
 
-all: clean s21_string.a test gcov_report open
+all: clean s21_string.a test gcov_report
 
-test: test.o s21_string.a
-	$(CC) test.o s21_string.a -o test -L. $(TEST_FLAGS)
-	
-	
-my_test: main.o s21_string.o s21_sprintf_funcs.o s21_sprintf_parser.o
-	$(CC) main.o s21_string.o s21_sprintf_funcs.o s21_sprintf_parser.o -o my_test.out -lm
-	
-main.o:
-	$(CC) $(CFLAGS) -c main.c -o main.o
-
-s21_string.o:
-	$(CC) $(CFLAGS) -c s21_string.c -o s21_string.o
-	
-s21_sprintf_funcs.o:
-	$(CC) $(CFLAGS) -c s21_sprintf_funcs.c -o s21_sprintf_funcs.o
-	
-s21_sprintf_parser.o:
-	$(CC) $(CFLAGS) -c s21_sprintf_parser.c -o s21_sprintf_parser.o
+test: test.o s21_sprintf_funcs.o s21_sprintf_parser.o s21_string.a
+	$(CC) test.o s21_sprintf_funcs.o s21_sprintf_parser.o s21_string.a -o test -L. $(TEST_FLAGS)
 
 test.o: test.c
 	$(CC) $(CFLAGS) test.c -o test.o
@@ -30,15 +14,24 @@ test.o: test.c
 test.c:
 	checkmk clean_mode=1 include.file *.check > test.c
 
-s21_string.a: s21_string.o
-	ar rcs s21_string.a s21_string.o
+s21_string.a: s21_sprintf_funcs.o s21_sprintf_parser.o s21_string.o 
+	ar rcs s21_string.a s21_sprintf_funcs.o s21_sprintf_parser.o s21_string.o
 	ranlib s21_string.a
+
+s21_string.o: s21_string.c 
+	$(CC) $(CFLAGS) s21_string.c -o s21_string.o
+
+s21_sprintf_funcs.o: s21_sprintf_funcs.c
+	$(CC) $(CFLAGS) s21_sprintf_funcs.c -o s21_sprintf_funcs.o
+
+s21_sprintf_parser.o: s21_sprintf_parser.c
+	$(CC) $(CFLAGS) s21_sprintf_parser.c -o s21_sprintf_parser.o
 
 clean:
 	rm -rf *.o *.a *.out *.info *.html *.gc* test gcov_report s21_string report test.c
 
 gcov_report:
-	$(CC) -fprofile-arcs -ftest-coverage test.c s21_string.c s21_sprintf_funcs.c s21_sprintf_parser.c -o gcov_report $(TEST_FLAGS) -lm
+	$(CC) -fprofile-arcs -ftest-coverage test.c s21_string.c s21_sprintf_funcs.c s21_sprintf_parser.c -o gcov_report $(TEST_FLAGS)
 	./gcov_report
 	lcov -t "test" -o test.info -c -d .
 	genhtml -o report test.info
@@ -60,7 +53,7 @@ leak:
 ifeq ($(OS),Darwin)
 	CK_FORK=no leaks -atExit -- ./test
 else
-	valgrind --leak-check=full -s --track-origins=yes ./my_test.out
+	CK_FORK=no valgrind --leak-check=full -s --track-origins=yes ./test
 endif	
 
 rebuild: all

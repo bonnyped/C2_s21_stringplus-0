@@ -159,7 +159,7 @@
 #test s21_sprintf_i_8
   char res[200] = "\0";
   char resorig[200] = "\0";
-  ck_assert_int_eq(sprintf(res, "%0.15i", 2147483647), s21_sprintf(resorig, "%0.15i", 2147483647));
+  ck_assert_int_eq(sprintf(res, "%015i", 2147483647), s21_sprintf(resorig, "%015i", 2147483647));
   ck_assert_str_eq(res, resorig);
 
 #test s21_sprintf_i_9
