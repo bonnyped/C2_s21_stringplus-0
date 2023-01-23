@@ -417,21 +417,26 @@ void *s21_to_lower(const char *str){
 void *s21_insert(const char *src, const char *str, s21_size_t start_index_trimed_buffer){
     char *srcstr = s21_NULL;
     if(src && str){
-        s21_size_t length_src = 0, length_str = 0;
+        s21_size_t length_src, length_str;
         s21_size_t count = 0;
         s21_size_t start_index_for_strsrc = 0;
         length_src = s21_strlen(src);
         length_str = s21_strlen(str);
         if(start_index_trimed_buffer <= length_src){
         srcstr = (char*)calloc((length_src + length_str + 2), sizeof(char));
-        if(length_str > 0){
+        if((length_str > 0 && length_src > 0) || (length_str = 0 && length_src > 0)){
         if(srcstr){
             for(s21_size_t i = 0; i < length_src + length_str; i++){
                 if(i == start_index_trimed_buffer){
+                  if(length_str == 0){
+                      srcstr[start_index_trimed_buffer] = str[0];
+                        count++;
+                  } else{
                     for(s21_size_t j = 0; j < length_str; j++){
                         srcstr[start_index_trimed_buffer + j] = str[j];
                         count++;
                     }
+                  }
                     start_index_for_strsrc = start_index_trimed_buffer + count;
                 } else {
                 count > 0 ? (srcstr[start_index_for_strsrc] = src[i - 1]) : (srcstr[start_index_for_strsrc] = src[i]);
@@ -442,8 +447,8 @@ void *s21_insert(const char *src, const char *str, s21_size_t start_index_trimed
             }
             }
         }
-        } else if(length_str == 0 ) {
-            srcstr = (char*)src;
+        } else if(length_str == 0 && length_src == 0){
+          srcstr[0] = src[0];
         }
     }
     }
