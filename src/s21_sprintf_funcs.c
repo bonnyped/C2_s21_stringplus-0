@@ -336,7 +336,7 @@ int is_zero(void* number, int type) {
 void print_double(long double num, int precision, int width, int right_padding,
                   char pading_symbol, int plus_sgn, int space_symbol,
                   int point_forced, char* dst) {
-  if (!check_special_float_nums(num, width, right_padding, pading_symbol,
+  if (!(double)check_special_float_nums(num, width, right_padding, pading_symbol,
                                 plus_sgn, space_symbol, dst)) {
     int number_sgn = 0;
     int whole_len;
@@ -344,6 +344,8 @@ void print_double(long double num, int precision, int width, int right_padding,
       number_sgn = -1;
       num = -num;
     }
+    long int power = 0;
+    num = round_double(num, &power,precision);
     long double whole_part;
     long double fract_part = modfl(num, &whole_part);
     if (whole_part > 0) {
@@ -389,7 +391,7 @@ void print_double(long double num, int precision, int width, int right_padding,
   }
 }
 
-int check_special_float_nums(long double num, int width, int right_padding,
+int check_special_float_nums(double num, int width, int right_padding,
                              char pading_symbol, int plus_sgn, int space_symbol,
                              char* dst) {
   int result = 0;
@@ -453,10 +455,10 @@ void print_whole_float(long double num, char* dst) {
   }
 }
 
-long double round_double(long double num, int* power, int precision) {
-  int next_digit = fmodl(num * powl(10, -precision), 10);
+long double round_double(long double num, long int* power, int precision) {
+  int next_digit = fmodl(num * powl(10, precision + 1), 10);
   if (next_digit >= 5) {
-    num = num + 0.5 * powl(10, (*power) - precision);
+    num = num + 0.5 * powl(10, - precision);
     *power = get_power(num);
   }
   return num;
@@ -466,7 +468,7 @@ void print_double_scientific(long double num, int precision, int width,
                              int right_padding, char pading_symbol,
                              int plus_sgn, int space_symbol, int capital,
                              int point_forced, char* dst) {
-  if (!check_special_float_nums(num, width, right_padding, pading_symbol,
+  if (!(double)check_special_float_nums(num, width, right_padding, pading_symbol,
                                 plus_sgn, space_symbol, dst)) {
     int number_sgn = 0;
     char* start_of_num = &dst[s21_strlen(dst)];
@@ -474,10 +476,9 @@ void print_double_scientific(long double num, int precision, int width,
       number_sgn = -1;
       num = -num;
     }
+    
     long int power = get_power(num);
-    if (power < precision) {
-      num = round_double(num, (int*)&power, precision);
-    }
+    round_double(num, &power, precision-power);
     int power_len = (int)number_length(&power, TYPE_LONG_INT);
     if (power_len < 2) {
       power_len = 2;
@@ -506,7 +507,7 @@ long int get_power(long double num) {
   if (num == 0.f) {
     result = 0;
   } else {
-    result = log10l(num);
+    result = (long int)log10l(num);
     if (result <= 0) {
       result--;
     }
@@ -518,7 +519,7 @@ void print_double_shortest(long double num, int precision, int width,
                            int right_padding, char pading_symbol, int plus_sgn,
                            int space_symbol, int capital, int point_forced,
                            char* dst) {
-  if (!check_special_float_nums(num, width, right_padding, pading_symbol,
+  if (!(double)check_special_float_nums(num, width, right_padding, pading_symbol,
                                 plus_sgn, space_symbol, dst)) {
     char* start_of_num = &dst[s21_strlen(dst)];
     long double original_num = num;
@@ -531,7 +532,7 @@ void print_double_shortest(long double num, int precision, int width,
     if (precision == 0) {
       precision = 1;
     }
-    original_num = round_double(original_num, (int*)&power, precision);
+    round_double(original_num, &power, precision);
     print_shortest_part(power, precision, original_num, right_padding,
                         pading_symbol, plus_sgn, space_symbol, capital,
                         point_forced, tmp);
