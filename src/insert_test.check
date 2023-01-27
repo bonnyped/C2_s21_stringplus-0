@@ -114,7 +114,7 @@
 #test test_insert_11
   char s1[30] = "1234";
   char *s3 = "\0";
-  char *s4 = "12";
+  char *s4 = "1234";
   s21_size_t num = 2;
   char *s2 = s21_insert(s1, s3, num);
   ck_assert_pstr_eq(s2, s4);
