@@ -1,9 +1,9 @@
 #ifndef S21_STRING_H
 #define S21_STRING_H
 
-#include <stdlib.h>
-#include <stdio.h>
 #include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #define s21_size_t unsigned long long
 #define s21_NULL (void *)0
@@ -161,4 +161,4 @@ void *s21_trim(const char *src, const char *trim_chars);
 int s21_sscanf(const char *str, const char *format, ...);
 int s21_sprintf(char *str, const char *format, ...);
 
-#endif // S21_STRING_H
+#endif  // S21_STRING_H

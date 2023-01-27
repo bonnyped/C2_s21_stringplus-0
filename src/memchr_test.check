@@ -47,3 +47,63 @@
   const char T1[] = "HELLO, WORLD!";
   int c8 = 'h';
   ck_assert_pstr_eq(memchr(t1, c8, 1), s21_memchr(T1, c8, 1));
+
+#test memchr_test_11 
+  char str[] = "Hello, world!";
+  int ch = ' ';
+  s21_size_t len = strlen(str);
+  ck_assert_ptr_eq(memchr(str, ch, len), s21_memchr(str, ch, len));
+
+#test memchr_test_12  
+  char str[] = "Hello, world!";
+  int ch = 101;
+  s21_size_t len = strlen(str);
+  ck_assert_ptr_eq(memchr(str, ch, len), s21_memchr(str, ch, len));
+
+#test memchr_test_13  
+  char str[] = "Hello, world!";
+  int ch = '1';
+  s21_size_t len = strlen(str);
+  ck_assert_ptr_eq(memchr(str, ch, len), s21_memchr(str, ch, len));
+
+#test memchr_test_14  
+  char str[] = "Hello, world!";
+  int ch = 65;
+  s21_size_t len = strlen(str);
+  ck_assert_ptr_eq(memchr(str, ch, len), s21_memchr(str, ch, len));
+
+#test memchr_test_15  
+  char str[] = "Hello, world!";
+  int ch = 'l';
+  s21_size_t len = 10;
+  ck_assert_ptr_eq(memchr(str, ch, len), s21_memchr(str, ch, len));
+
+#test memchr_test_16  
+  char str[] = "Hello, world!";
+  int ch = 'w';
+  s21_size_t len = 5;
+  ck_assert_ptr_eq(memchr(str, ch, len), s21_memchr(str, ch, len));
+
+#test memchr_test_17  
+  char str[] = "69917020";
+  int ch = '3';
+  s21_size_t len = strlen(str);
+  ck_assert_ptr_eq(memchr(str, ch, len), s21_memchr(str, ch, len));
+
+#test memchr_test_18  
+  char str[] = "69917020";
+  int ch = '6';
+  s21_size_t len = 0;
+  ck_assert_ptr_eq(memchr(str, ch, len), s21_memchr(str, ch, len));
+
+#test memchr_test_19  
+  char str[] = "69917020";
+  int ch = 'g';
+  s21_size_t len = strlen(str);
+  ck_assert_ptr_eq(memchr(str, ch, len), s21_memchr(str, ch, len));
+
+#test memchr_test_20
+  char str[] = "69917020";
+  int ch = '\0';
+  s21_size_t len = 9;
+  ck_assert_ptr_eq(memchr(str, ch, len), s21_memchr(str, ch, len));
