@@ -31,7 +31,7 @@ clean:
 	rm -rf *.o *.a *.out *.info *.log *.html *.gc* test gcov_report s21_string report test.c
 
 gcov_report:
-	$(CC) -fprofile-arcs -ftest-coverage test.c s21_string.c s21_sprintf_funcs.c s21_sprintf_parser.c -o gcov_report -lm $(TEST_FLAGS)
+	$(CC) -fprofile-arcs -ftest-coverage test.c s21_string.c s21_sprintf_funcs.c s21_sprintf_parser.c -o gcov_report $(TEST_FLAGS)
 	./gcov_report
 	lcov -t "test" -o test.info -c -d .
 	genhtml -o report test.info

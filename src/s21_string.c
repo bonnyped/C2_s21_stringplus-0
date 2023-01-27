@@ -364,7 +364,7 @@ char *s21_strtok(char *str, const char *delim) {
     } else if (*str == '\0' || *delim == '\0') {
       *str == '\0' ? pointer = s21_NULL : (pointer = str);
     } else {
-      static_pointer = match + 1;
+      match ? (static_pointer = match + 1) : (static_pointer = s21_NULL);
       if (match)
         *match = '\0';
       else
