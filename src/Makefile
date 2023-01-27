@@ -6,7 +6,7 @@ TEST_FLAGS = $(shell pkg-config --cflags --libs check)
 all: clean s21_string.a test gcov_report
 
 test: test.o s21_sprintf_funcs.o s21_sprintf_parser.o s21_string.a
-	$(CC) test.o s21_sprintf_funcs.o s21_sprintf_parser.o s21_string.a -o test -lm -L. $(TEST_FLAGS)
+	$(CC) test.o s21_sprintf_funcs.o s21_sprintf_parser.o s21_string.a -o test -L. $(TEST_FLAGS)
 
 test.o: test.c
 	$(CC) $(CFLAGS) test.c -o test.o
