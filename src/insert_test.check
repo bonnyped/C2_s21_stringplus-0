@@ -110,3 +110,30 @@
   char *s2 = s21_insert(s1, s3, num);
   ck_assert_pstr_eq(s2, s4);
   if (s2) free(s2);
+
+#test test_insert_11
+  char s1[30] = "1234";
+  char *s3 = "\0";
+  char *s4 = "12";
+  s21_size_t num = 2;
+  char *s2 = s21_insert(s1, s3, num);
+  ck_assert_pstr_eq(s2, s4);
+  if (s2) free(s2);
+
+#test test_insert_12
+  char s1[30] = "1234";
+  char *s3 = s21_NULL;
+  char *s4 = s21_NULL;
+  s21_size_t num = 2;
+  char *s2 = s21_insert(s1, s3, num);
+  ck_assert_pstr_eq(s2, s4);
+  if (s2) free(s2);
+
+#test test_insert_13
+  char s1[30] = "1234";
+  char *s3 = "a";
+  char *s4 = s21_NULL;
+  s21_size_t num = 33;
+  char *s2 = s21_insert(s1, s3, num);
+  ck_assert_pstr_eq(s2, s4);
+  if (s2) free(s2);
