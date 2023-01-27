@@ -336,8 +336,9 @@ int is_zero(void* number, int type) {
 void print_double(long double num, int precision, int width, int right_padding,
                   char pading_symbol, int plus_sgn, int space_symbol,
                   int point_forced, char* dst) {
-  if (!(double)check_special_float_nums(num, width, right_padding, pading_symbol,
-                                plus_sgn, space_symbol, dst)) {
+  if (!(double)check_special_float_nums(num, width, right_padding,
+                                        pading_symbol, plus_sgn, space_symbol,
+                                        dst)) {
     int number_sgn = 0;
     int whole_len;
     if (num < 0) {
@@ -345,13 +346,12 @@ void print_double(long double num, int precision, int width, int right_padding,
       num = -num;
     }
     long int power = 0;
-    num = round_double(num, &power,precision);
+    num = round_double(num, &power, precision);
     long double whole_part;
     long double fract_part = modfl(num, &whole_part);
     if (whole_part > 0) {
       whole_len = log10l(whole_part) + 1;
-      if (whole_len < 0)
-        whole_len = 2000;
+      if (whole_len < 0) whole_len = 2000;
     } else {
       whole_len = 1;
     }
@@ -402,7 +402,7 @@ int check_special_float_nums(double num, int width, int right_padding,
       add_padding(width - printed_len, pading_symbol, dst);
     }
   }
-  if (isnan(num)!=0) {
+  if (isnan(num) != 0) {
     print_inf_nan_sgn(sign, plus_sgn, space_symbol, dst);
     print_string("nan", dst, -1, 0, 0, ' ');
     result = 1;
@@ -458,7 +458,7 @@ void print_whole_float(long double num, char* dst) {
 long double round_double(long double num, long int* power, int precision) {
   int next_digit = fmodl(num * powl(10, precision + 1), 10);
   if (next_digit >= 5) {
-    num = num + 0.5 * powl(10, - precision);
+    num = num + 0.5 * powl(10, -precision);
     *power = get_power(num);
   }
   return num;
@@ -468,17 +468,18 @@ void print_double_scientific(long double num, int precision, int width,
                              int right_padding, char pading_symbol,
                              int plus_sgn, int space_symbol, int capital,
                              int point_forced, char* dst) {
-  if (!(double)check_special_float_nums(num, width, right_padding, pading_symbol,
-                                plus_sgn, space_symbol, dst)) {
+  if (!(double)check_special_float_nums(num, width, right_padding,
+                                        pading_symbol, plus_sgn, space_symbol,
+                                        dst)) {
     int number_sgn = 0;
     char* start_of_num = &dst[s21_strlen(dst)];
     if (num < 0) {
       number_sgn = -1;
       num = -num;
     }
-    
+
     long int power = get_power(num);
-    round_double(num, &power, precision-power);
+    round_double(num, &power, precision - power);
     int power_len = (int)number_length(&power, TYPE_LONG_INT);
     if (power_len < 2) {
       power_len = 2;
@@ -519,8 +520,9 @@ void print_double_shortest(long double num, int precision, int width,
                            int right_padding, char pading_symbol, int plus_sgn,
                            int space_symbol, int capital, int point_forced,
                            char* dst) {
-  if (!(double)check_special_float_nums(num, width, right_padding, pading_symbol,
-                                plus_sgn, space_symbol, dst)) {
+  if (!(double)check_special_float_nums(num, width, right_padding,
+                                        pading_symbol, plus_sgn, space_symbol,
+                                        dst)) {
     char* start_of_num = &dst[s21_strlen(dst)];
     long double original_num = num;
     if (num < 0) {

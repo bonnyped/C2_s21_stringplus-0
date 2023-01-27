@@ -49,8 +49,6 @@ char hex_char_from_num(int num, int capital);
 void print_hexa_oct_num_part(long unsigned int number, int base,
                              int in_upper_case, int pointer, char pading_symbol,
                              char* dst);
-// void print_pointer(unsigned int pointer ,int width, int right_padding, char*
-// dst);
 void int_to_chars(void* input, int number_length, char* array, int type);
 s21_size_t number_length(void* input, int type);
 int get_int_sign(void* number, int type);
