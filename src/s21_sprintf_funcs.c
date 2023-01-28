@@ -176,12 +176,6 @@ void print_hexadecimal(long unsigned int number, int precision, int width,
       plus = 0;
       space = 0;
       precision = 0;
-      // if (!right_padding) {width =0}
-    }
-    if (plus && pointer) {
-      print_char('+', tmp, 1, 0, pading_symbol);
-    } else if (space && pointer) {
-      print_char(' ', tmp, 1, 0, pading_symbol);
     }
     if (prefix && number != 0) {
       print_prefix('X', 'x', in_upper_case, 1, tmp);
