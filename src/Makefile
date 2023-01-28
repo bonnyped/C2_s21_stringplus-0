@@ -49,7 +49,7 @@ clang:
 clangI:
 	clang-format -i -style=google *.c *.h
 
-leak:
+leak: test
 ifeq ($(OS),Darwin)
 	CK_FORK=no leaks -atExit -- ./test
 else
