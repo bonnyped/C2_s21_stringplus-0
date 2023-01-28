@@ -115,3 +115,16 @@
   char resorig[200];
   ck_assert_int_eq(s21_sprintf(res, "%*x%*.*x%.*x%0hx %-.100lx", 13, a, 10, 12, b, 0, g, e, h), sprintf(resorig, "%*x%*.*x%.*x%0hx %-.100lx", 13, a, 10, 12, b, 0, g, e, h));
   ck_assert_pstr_eq(res, resorig);
+
+
+#test test_x15
+  char res[200];
+  char resorig[200];
+  char *format = "%X Hamlet %X HELLo! %X";
+  int val = 0X7a4;
+  int val2 = 0X9112312f;
+  int val3 = 0X3123;
+  ck_assert_int_eq(sprintf(res, format, val, val2, val3),
+                   s21_sprintf(resorig, format, val, val2, val3));
+  ck_assert_pstr_eq(res, resorig);
+
