@@ -7,10 +7,10 @@
 
 #define s21_size_t unsigned long long
 #define s21_NULL (void *)0
+
 #if defined(__linux__)
 #define UNKNOWN_ERROR "Unknown error "
 #define ARRAY_SIZE 133
-#define BUFFSIZE 100
 #define s21_error                                                              \
   {                                                                            \
     "Success", "Operation not permitted", "No such file or directory",         \
